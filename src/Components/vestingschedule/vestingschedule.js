@@ -9,7 +9,6 @@ const Vestingschedule = () => {
         <div>
              <p className='absolute text ' style={{ fontSize: 60 * ratio, top: 2730 * ratio, left: 670 * ratio }} >VESTING SCHEDULE</p>
             <table className="absolute text-while" style={{ height: 300 * ratio, width: 1500 * ratio, top: 2850 * ratio, left: 150 * ratio }} >
-                
                     <tr>
                         <td>Data 1</td>
                         <td>Data 2</td>
