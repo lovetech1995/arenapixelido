@@ -9,8 +9,18 @@
 }
 .absolute{
   position: absolute;
+  
 }
 .text{
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
+.boder{
+  border: 1px white solid;
+}
+.text-bold{
+
   font-weight: bold;
   text-align: center;
   color: white;
