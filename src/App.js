@@ -15,6 +15,8 @@ import logo from "./image/logo.png"
 function App() {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { rotate, width, height, marginLeft,ratio } = size;
+  console.log('width::: ', width);
+  console.log('height::: ', height);
   return (
     <div
       id="root"
