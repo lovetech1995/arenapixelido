@@ -2,3 +2,9 @@
   margin: 0;
   padding: 0;
 }
+.container-screen {
+  top: 0;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: contain;
+}

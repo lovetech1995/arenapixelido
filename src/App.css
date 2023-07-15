@@ -1,7 +1,17 @@
-
 .background {
   height: 100%;
-     background-size: cover;
-    transform-origin: left top;
-  }
- 
+  background-size: cover;
+  transform-origin: left top;
+}
+
+.mobile-rotater {
+  transform-origin: left top;
+}
+.absolute{
+  position: absolute;
+}
+.text{
+  font-weight: bold;
+  text-align: center;
+  color: white;
+}
