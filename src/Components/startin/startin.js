@@ -58,39 +58,40 @@ const Startin = () => {
             <p id="second" className="absolute text boder boder" style={{ height: 126 * ratio, width: 142 * ratio, fontSize: 80 * ratio, top: 2150 * ratio, left: 1158 * ratio }}>3</p>
             <p id="secondtext" className="absolute text boder" style={{ height: 35 * ratio, width: 142 * ratio, fontSize: 30 * ratio, top: 2240 * ratio, left: 1158 * ratio }}>Second</p>
             <a><img src={connectbutton} className='absolute' alt="connectbutton" style={{ height: 76 * ratio, width: 386 * ratio, top: 2610 * ratio, left: 760 * ratio }} /></a>
-            <table className="absolute text-while" style={{ height: 300 * ratio, width: 1500 * ratio, top: 2300 * ratio, left: 150 * ratio }} >
-               <thead>
-                 <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                </tr> 
+            <table className="absolute text-while" style={{ fontSize:30*ratio,height: 300 * ratio, width: 1500 * ratio, top: 2300 * ratio, left: 150 * ratio }} >
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
                 </thead>
-                <tbody> <tr>
-                    <td>Total</td>
-                    <td>4,000,000 APX</td>
-                    <td>Token Name</td>
-                    <td>Arena Pixel</td>
-                </tr>
-                <tr>
-                    <td>Allwance</td>
-                    <td>4000 slots</td>
-                    <td>Symbol</td>
-                    <td>APX</td>
-                </tr>
-                <tr>
-                    <td>Purchased</td>
-                    <td>0 slots</td>
-                    <td>Contract</td>
-                    <td><a  >df68g...dhg5b</a></td>
-                </tr>
-                <tr>
-                    <td>Available</td>
-                    <td>4000 slots</td>
-                    <td>Allocating per slot</td>
-                    <td>50 USDT ~ 1000 APX</td>
-                </tr></tbody>
+                <tbody>
+                    <tr>
+                        <td>Total</td>
+                        <td>4,000,000 APX</td>
+                        <td>Token Name</td>
+                        <td>Arena Pixel</td>
+                    </tr>
+                    <tr>
+                        <td>Allwance</td>
+                        <td>4000 slots</td>
+                        <td>Symbol</td>
+                        <td>APX</td>
+                    </tr>
+                    <tr>
+                        <td>Purchased</td>
+                        <td>0 slots</td>
+                        <td>Contract</td>
+                        <td><a  >df68g...dhg5b</a></td>
+                    </tr>
+                    <tr>
+                        <td>Available</td>
+                        <td>4000 slots</td>
+                        <td>Allocating per slot</td>
+                        <td>50 USDT ~ 1000 APX</td>
+                    </tr></tbody>
             </table>
         </div>
     );
