@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
-import connectbutton from "./image/connectbutton.png";
+
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 import { getApprove } from "../../hooks/getApprove";
@@ -210,19 +210,7 @@ const Startin = () => {
       >
         Second
       </p>
-      <a>
-        <img
-          src={connectbutton}
-          className="absolute"
-          alt="connectbutton"
-          style={{
-            height: 76 * ratio,
-            width: 386 * ratio,
-            top: 2610 * ratio,
-            left: 760 * ratio,
-          }}
-        />
-      </a>
+      
       <table
         className="absolute text-while"
         style={{
