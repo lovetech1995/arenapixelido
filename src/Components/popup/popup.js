@@ -17,7 +17,7 @@ const web3 = require("web3");
 
 export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
   console.log("wallet", wallet);
-  const [open, setOpen] = useState(false);
+  //   const [open, setOpen] = useState(false);
   const [approved, setApproved] = useState(false);
   //   const [boughtSlots, setBoughtSlots] = useState(0);
 
@@ -76,9 +76,9 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
     <div>
       <Modal
         keepMounted
-        open={open}
+        open={isOpened}
         onClose={onClose}
-        style={{ pointerEvents: open ? "auto" : "none" }}
+        style={{ pointerEvents: isOpened ? "auto" : "none" }}
         // aria-labelledby="keep-mounted-modal-title"
         // aria-describedby="keep-mounted-modal-description"
       >

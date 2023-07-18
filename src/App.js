@@ -49,8 +49,12 @@ function App() {
     }
   };
 
-  const handleModal = () => {
+  const handleOpenModal = () => {
     setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
   };
 
   const handleBoughtSlots = (slots) => {
@@ -61,9 +65,6 @@ function App() {
     connectWallet();
   }, [walletAddress]);
 
-  const handleCloseModal = () => {
-    setModalOpen(false);
-  };
   return (
     <div
       id="root"
@@ -79,7 +80,7 @@ function App() {
       <Info />
       <Startin slots={boughtSlots} />
       {walletAddress ? (
-        <a className="button" onClick={handleModal}>
+        <a className="button" onClick={handleOpenModal}>
           <img
             src={purchaseButton}
             className="absolute"
