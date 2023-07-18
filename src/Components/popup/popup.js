@@ -2,7 +2,7 @@ import "../../App.css";
 import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-// import Button from "@mui/material/Button";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import backgroudPop from "./image/backgroud.png";
 import textfield from "./image/FRAME.png";
@@ -15,7 +15,7 @@ import { getApprove } from "../../hooks/getApprove";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 const web3 = require("web3");
 
-export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
+export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
   console.log("wallet", wallet);
   const [open, setOpen] = useState(false);
   const [approved, setApproved] = useState(false);
@@ -36,6 +36,15 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
       handleOpen();
     }
   }, []);
+
+  const handleMinusClick = (check) => {
+    var number = document.getElementById("number").innerText;
+    if (check === true && number < 10) {
+      document.getElementById("number").innerText = parseInt(number) + 1;
+    } else if (check === false && number > 1) {
+      document.getElementById("number").innerText = parseInt(number) - 1;
+    }
+  };
 
   const handleApprove = async (amount) => {
     console.log("amount", amount);
@@ -68,9 +77,10 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
       <Modal
         keepMounted
         open={open}
-        onClose={handleClose}
-        aria-labelledby="keep-mounted-modal-title"
-        aria-describedby="keep-mounted-modal-description"
+        onClose={onClose}
+        style={{ pointerEvents: open ? "auto" : "none" }}
+        // aria-labelledby="keep-mounted-modal-title"
+        // aria-describedby="keep-mounted-modal-description"
       >
         <Box
           sx={{
@@ -98,7 +108,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
           >
             Quantity(slots)
           </Typography>
-          <a>
+          <a className="button" onClick={() => handleMinusClick(false)}>
             <img
               src={minusbt}
               className="absolute"
@@ -123,8 +133,19 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
               left: 710 * ratio,
             }}
           />
+          <img
+            src={textfield}
+            className="absolute"
+            alt="textfield"
+            style={{
+              height: 62 * ratio,
+              width: 334 * ratio,
+              top: 205 * ratio,
+              left: 710 * ratio,
+            }}
+          />
 
-          <a>
+          <a className="button" onClick={() => handleMinusClick(true)}>
             <img
               src={plusbt}
               className="absolute"
@@ -138,6 +159,19 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
             />{" "}
           </a>
 
+          <Typography
+            id="number"
+            className="text-bold absolute"
+            style={{
+              fontSize: 50 * ratio,
+              top: 210 * ratio,
+              left: 860 * ratio,
+            }}
+            variant="h3"
+            component="h2"
+          >
+            1
+          </Typography>
           <Typography
             id="number"
             className="text-bold absolute"
@@ -165,7 +199,33 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
           >
             Receive:
           </Typography>
+          <Typography
+            id="receive"
+            className="text-bold absolute"
+            style={{
+              fontSize: 50 * ratio,
+              top: 350 * ratio,
+              left: 135 * ratio,
+            }}
+            variant="h3"
+            component="h2"
+          >
+            Receive:
+          </Typography>
 
+          <Typography
+            id="receiveNumber"
+            className="text-bold absolute"
+            style={{
+              fontSize: 50 * ratio,
+              top: 350 * ratio,
+              left: 330 * ratio,
+            }}
+            variant="h3"
+            component="h2"
+          >
+            3000 APX
+          </Typography>
           <Typography
             id="receiveNumber"
             className="text-bold absolute"
@@ -206,7 +266,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
           >
             150 USD
           </Typography>
-          <a>
+          <a className="button">
             <img
               src={bt}
               className="absolute"
