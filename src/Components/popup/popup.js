@@ -16,34 +16,39 @@ import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 const web3 = require("web3");
 
 export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
-  console.log("wallet", wallet);
-  //   const [open, setOpen] = useState(false);
   const [approved, setApproved] = useState(false);
-  //   const [boughtSlots, setBoughtSlots] = useState(0);
-
-  //   const handleOpen = async () => setOpen(true);
-  //   const handleClose = async () => {
-  //     setOpen(false);
-  //     isOpened = false;
-  //     console.log("open", isOpened);
-  //   };
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [boughtQuantity, setBoughtQuantity] = useState(1);
+  const [received, setReceived] = useState("");
+  const [price, setPrice] = useState("");
 
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
-  //   useEffect(() => {
-  //     if (isOpened) {
-  //       handleOpen();
-  //     }
-  //   }, []);
+  useEffect(() => {
+    handleReceivePrice(boughtQuantity);
+  }, [boughtQuantity]);
 
-  const handleMinusClick = (check) => {
+  const handleMinusClick = async (check) => {
     var number = document.getElementById("number").innerText;
     if (check === true && number < 10) {
       document.getElementById("number").innerText = parseInt(number) + 1;
     } else if (check === false && number > 1) {
       document.getElementById("number").innerText = parseInt(number) - 1;
     }
+    setBoughtQuantity((prevQuantity) =>
+      check === true && prevQuantity < 10
+        ? prevQuantity + 1
+        : check === false && prevQuantity > 1
+        ? prevQuantity - 1
+        : prevQuantity
+    );
+  };
+
+  const handleReceivePrice = async (number) => {
+    const quantity = parseInt(number);
+    setPrice(`${quantity * 50} USD`);
+    setReceived(`${quantity * 1000} APX`);
   };
 
   const handleApprove = async (amount) => {
@@ -52,23 +57,27 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
     return await getApprove(wallet, amount);
   };
 
-  const handleBuyIDO = async (quantity) => {
+  const handleBuyIDO = async () => {
+    setIsProcessing(true);
+    const quantity = document.getElementById("number").innerText;
     const quantityInt = parseInt(quantity);
     console.log("quantityInt", quantityInt);
     const value = quantity * 50;
-    console.log("value", value);
     const valueInWei = web3.utils.toWei(value, "ether");
-    console.log("valueInWei", valueInWei);
-    const txApprove = await handleApprove(valueInWei);
-    if (txApprove) {
+    try {
+      await handleApprove(valueInWei);
       await buyIdo(wallet, quantity);
       await handleBoughtSlots();
+      setIsProcessing(false);
+      onClose();
+    } catch (err) {
+      console.log(err);
+      setIsProcessing(false);
     }
   };
 
   const handleBoughtSlots = async () => {
     const slots = await getBoughtSlots();
-    // setBoughtSlots(slots);
     onUpdateSlots(slots);
   };
 
@@ -79,8 +88,6 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
         open={isOpened}
         onClose={onClose}
         style={{ pointerEvents: isOpened ? "auto" : "none" }}
-        // aria-labelledby="keep-mounted-modal-title"
-        // aria-describedby="keep-mounted-modal-description"
       >
         <Box
           sx={{
@@ -90,7 +97,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
             transform: "translate(-50%, -50%)",
             width: 1175 * ratio,
             height: 569 * ratio,
-            backgroundImage: `url(${backgroudPop})`, // Thay đổi đường dẫn đến hình ảnh của bạn
+            backgroundImage: `url(${backgroudPop})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
           }}
@@ -108,6 +115,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
           >
             Quantity(slots)
           </Typography>
+
           <a className="button" onClick={() => handleMinusClick(false)}>
             <img
               src={minusbt}
@@ -122,17 +130,6 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
             />
           </a>
 
-          <img
-            src={textfield}
-            className="absolute"
-            alt="textfield"
-            style={{
-              height: 62 * ratio,
-              width: 334 * ratio,
-              top: 205 * ratio,
-              left: 710 * ratio,
-            }}
-          />
           <img
             src={textfield}
             className="absolute"
@@ -172,33 +169,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
           >
             1
           </Typography>
-          <Typography
-            id="number"
-            className="text-bold absolute"
-            style={{
-              fontSize: 50 * ratio,
-              top: 210 * ratio,
-              left: 860 * ratio,
-            }}
-            variant="h3"
-            component="h2"
-          >
-            1
-          </Typography>
 
-          <Typography
-            id="receive"
-            className="text-bold absolute"
-            style={{
-              fontSize: 50 * ratio,
-              top: 350 * ratio,
-              left: 135 * ratio,
-            }}
-            variant="h3"
-            component="h2"
-          >
-            Receive:
-          </Typography>
           <Typography
             id="receive"
             className="text-bold absolute"
@@ -224,20 +195,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
             variant="h3"
             component="h2"
           >
-            3000 APX
-          </Typography>
-          <Typography
-            id="receiveNumber"
-            className="text-bold absolute"
-            style={{
-              fontSize: 50 * ratio,
-              top: 350 * ratio,
-              left: 330 * ratio,
-            }}
-            variant="h3"
-            component="h2"
-          >
-            3000 APX
+            {received}
           </Typography>
 
           <Typography
@@ -253,6 +211,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
           >
             Price:
           </Typography>
+
           <Typography
             id="receive"
             className="text-bold absolute"
@@ -264,8 +223,9 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
             variant="h3"
             component="h2"
           >
-            150 USD
+            {price}
           </Typography>
+
           <a className="button">
             <img
               src={bt}
@@ -277,7 +237,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
                 top: 480 * ratio,
                 left: 455 * ratio,
               }}
-              onClick={() => handleBuyIDO(1)}
+              onClick={() => (isProcessing ? null : handleBuyIDO())}
             />{" "}
           </a>
         </Box>
