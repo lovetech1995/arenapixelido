@@ -15,7 +15,7 @@ function App() {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { rotate, width, height, marginLeft, ratio } = size;
 
-  const [isLoading, setIsLoading] = useState(true);
+ 
   const [walletAddress, setWalletAddress] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,7 +49,7 @@ function App() {
     const endTime = await getEndTime();
     setStartTimePayment(startTime);
     setEndTimePayment(endTime);
-    setIsLoading(false);
+    
   };
 
   const isTimeBuy = async () => {
@@ -87,7 +87,7 @@ function App() {
 
   useEffect(() => {
     connectWallet();
-  }, [walletAddress]);
+  });
 
   return (
     <div
