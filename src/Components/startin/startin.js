@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
-import connectbutton from "./image/connectbutton.png";
-import purchaseButton from "./image/purchaseButton.png";
+// import connectbutton from "./image/connectbutton.png";
+// import purchaseButton from "./image/purchaseButton.png";
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 // import { getApprove } from "../../hooks/getApprove";
 // import { buyIdo } from "../../hooks/buyIdo";
-import Popup from "../popup/popup";
+// import Popup from "../popup/popup";
 
 const Startin = ({ slots }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });

@@ -124,7 +124,7 @@ function App() {
         onUpdateSlots={handleBoughtSlots}
         onClose={handleCloseModal}
       />
-      <Popup />
+      {/* <Popup /> */}
       <img
         src={logo}
         className="absolute"
