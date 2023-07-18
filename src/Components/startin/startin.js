@@ -1,54 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
-// import connectbutton from "./image/connectbutton.png";
-// import purchaseButton from "./image/purchaseButton.png";
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
-// import { getApprove } from "../../hooks/getApprove";
-// import { buyIdo } from "../../hooks/buyIdo";
-// import Popup from "../popup/popup";
 
 const Startin = ({ slots }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
-  const [walletAddress, setWalletAddress] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [startTimePayment, setStartTimePayment] = useState("");
   const [endTimePayment, setEndTimePayment] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
-  // const [approved, setApproved] = useState(false);
-
-  // const connectWallet = async () => {
-  //   let provider = window.ethereum;
-
-  //   if (typeof provider !== "undefined") {
-  //     provider
-  //       .request({ method: "eth_requestAccounts" })
-  //       .then((accounts) => {
-  //         setWalletAddress(accounts[0]);
-  //         console.log(`Selected account is ${walletAddress}`);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         return;
-  //       });
-
-  //     window.ethereum.on("accountsChanged", function (accounts) {
-  //       setWalletAddress(accounts[0]);
-  //       console.log(`Selected account changed to ${walletAddress}`);
-  //     });
-  //   }
-  //   // setInitial(true);
-  // };
 
   const fetchInformations = async () => {
     try {
-      const startTime = await getStartTime();
-      setStartTimePayment(startTime);
-      const endTime = await getEndTime();
-      setEndTimePayment(endTime);
+      // const startTime = await getStartTime();
+      // setStartTimePayment(startTime);
+      // const endTime = await getEndTime();
+      // setEndTimePayment(endTime);
       handleBoughtSlots();
       setIsLoading(false);
     } catch (error) {
@@ -56,6 +26,32 @@ const Startin = ({ slots }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchStartTimePayment = async () => {
+      try {
+        const startTime = await getStartTime();
+        setStartTimePayment(startTime);
+      } catch (error) {
+        console.error("Error fetching startTimePayment:", error);
+      }
+    };
+
+    fetchStartTimePayment();
+  }, []);
+
+  useEffect(() => {
+    const fetchEndTimePayment = async () => {
+      try {
+        const startTime = await getEndTime();
+        setEndTimePayment(startTime);
+      } catch (error) {
+        console.error("Error fetching endTimePayment:", error);
+      }
+    };
+
+    fetchEndTimePayment();
+  }, []);
 
   const handleBoughtSlots = async () => {
     const boughtSlots = await getBoughtSlots();
@@ -71,29 +67,22 @@ const Startin = ({ slots }) => {
   }, []);
 
   useEffect(() => {
-    const targetDate = "2023-12-31T23:59:59";
+    const targetDate = "2023-07-19T11:00:00";
     // isLoading ?? startTimePayment
     // const targetDate = startTimePayment; //11249560
     countdown(targetDate);
   }, []);
 
   function countdown(targetDate) {
-    // Lấy ngày giờ hiện tại
     const now = new Date().getTime();
-
-    // Lấy ngày giờ đích đến
     const endDate = new Date(targetDate).getTime();
-
-    // Tính toán thời gian còn lại từ ngày giờ hiện tại đến endDate
     const distance = endDate - now;
 
-    // Kiểm tra xem thời gian đã hết hay chưa
     if (distance <= 0) {
-      console.log("Đã hết thời gian!");
+      console.log("Time out!");
       return;
     }
 
-    // Tính toán số ngày, giờ, phút, giây còn lại
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor(
       (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)

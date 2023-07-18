@@ -27,7 +27,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
 
   useEffect(() => {
     handleReceivePrice(boughtQuantity);
-  }, [boughtQuantity]);
+  }, [wallet, boughtQuantity]);
 
   const handleMinusClick = async (check) => {
     var number = document.getElementById("number").innerText;

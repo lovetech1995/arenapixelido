@@ -4,14 +4,12 @@ import { useWindowSize } from "./useWindowSize";
 import backgroundImage from "./image/background.png";
 import Info from "./Components/info/info";
 import Startin from "./Components/startin/startin";
-import Vestingschedule from "./Components/vestingschedule/vestingschedule";
+import { Vestingschedule } from "./Components/vestingschedule/vestingschedule";
 import logo from "./image/logo.png";
 import connectbutton from "./image/connectbutton.png";
 import purchaseButton from "./image/purchaseButton.png";
 import { PurchaseModal } from "./Components/popup/popup";
-import { getBoughtSlots } from "./hooks/getBoughtSlot";
-// import { getApprove } from "./hooks/getApprove";
-// import { buyIdo } from "./hooks/buyIdo";
+import { getStartTime, getEndTime } from "./hooks/getPaymentTime";
 
 function App() {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
@@ -21,11 +19,8 @@ function App() {
   const [walletAddress, setWalletAddress] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
-
-  // const getWalletAddress = (value) => {
-  //   console.log("app walllet", walletAddress, value);
-  //   setWalletAddress(value);
-  // };
+  const [startTimePayment, setStartTimePayment] = useState("");
+  const [endTimePayment, setEndTimePayment] = useState("");
 
   const connectWallet = async () => {
     let provider = window.ethereum;
@@ -49,6 +44,28 @@ function App() {
     }
   };
 
+  const fetchTime = async () => {
+    const startTime = await getStartTime();
+    const endTime = await getEndTime();
+    setStartTimePayment(startTime);
+    setEndTimePayment(endTime);
+    setIsLoading(false);
+  };
+
+  const isTimeBuy = async () => {
+    await fetchTime();
+    const currentTime = new Date().getTime() / 1000;
+    if (startTimePayment && currentTime < startTimePayment) {
+      alert("You can't buy before IDO time");
+      return false;
+    }
+    if (endTimePayment && currentTime > endTimePayment) {
+      alert("IDO time is finished");
+      return false;
+    }
+    return true;
+  };
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -59,6 +76,13 @@ function App() {
 
   const handleBoughtSlots = (slots) => {
     setBoughtSlots(slots);
+  };
+
+  const handleTimeBuy = async () => {
+    const isTime = await isTimeBuy();
+    if (isTime) {
+      handleOpenModal();
+    }
   };
 
   useEffect(() => {
@@ -80,7 +104,7 @@ function App() {
       <Info />
       <Startin slots={boughtSlots} />
       {walletAddress ? (
-        <a className="button" onClick={handleOpenModal}>
+        <a className="button" onClick={handleTimeBuy}>
           <img
             src={purchaseButton}
             className="absolute"
@@ -92,14 +116,6 @@ function App() {
               left: 760 * ratio,
             }}
           />
-          {/* <PurchaseModal isOpened={true} wallet={walletAddress} /> */}
-          {/* {modalOpen && walletAddress && (
-            <PurchaseModal
-              isOpened={modalOpen}
-              wallet={walletAddress}
-              onUpdateSlots={handleBoughtSlots}
-            />
-          )} */}
         </a>
       ) : (
         <a>
@@ -118,14 +134,13 @@ function App() {
         </a>
       )}
       ;
-      <Vestingschedule />
+      <Vestingschedule wallet={walletAddress} />
       <PurchaseModal
         isOpened={modalOpen}
         wallet={walletAddress}
         onUpdateSlots={handleBoughtSlots}
         onClose={handleCloseModal}
       />
-      {/* <Popup /> */}
       <img
         src={logo}
         className="absolute"
