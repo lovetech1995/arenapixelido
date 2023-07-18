@@ -2,7 +2,7 @@ import { getContract } from "../utils/web3Client";
 
 export const buyIdo = async (walletAddress, quantity) => {
   const quantityInt = parseInt(quantity);
-  if (quantityInt == 0) {
+  if (quantityInt === 0) {
     return 0;
   }
   const contract = await getContract();
