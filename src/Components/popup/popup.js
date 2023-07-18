@@ -15,7 +15,7 @@ import { getApprove } from "../../hooks/getApprove";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 const web3 = require("web3");
 
-export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
+export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
   console.log("wallet", wallet);
   const [open, setOpen] = useState(false);
   const [approved, setApproved] = useState(false);
@@ -28,89 +28,50 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
     console.log("open", isOpened);
   };
 
-  const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
-  const { ratio } = size;
+export default function KeepMountedModal() {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+    const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
+    const { ratio } = size;
 
-  useEffect(() => {
-    if (isOpened) {
-      handleOpen();
-    }
-  }, []);
+    const handleMinusClick = (check) => {
+        var number = document.getElementById('number').innerText;
+        if (check === true && number < 10) {
+            document.getElementById('number').innerText = parseInt(number) +  1;
+        } else if (check === false && number > 1) {
+            document.getElementById('number').innerText = parseInt(number) - 1;
+        }
+        
+       };
+    return (
+        <div>
+          
+            <Modal
+                keepMounted
+                open={open}
+                onClose={onClose}
+                style={{ pointerEvents: open ? 'auto' : 'none' }}
+                // aria-labelledby="keep-mounted-modal-title"
+                // aria-describedby="keep-mounted-modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 1175 * ratio,
+                    height: 569 * ratio,
+                    backgroundImage: `url(${backgroudPop})`, // Thay đổi đường dẫn đến hình ảnh của bạn
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    outline: 'none'
 
-  const handleApprove = async (amount) => {
-    console.log("amount", amount);
-    console.log("wallet", wallet);
-    return await getApprove(wallet, amount);
-  };
-
-  const handleBuyIDO = async (quantity) => {
-    const quantityInt = parseInt(quantity);
-    console.log("quantityInt", quantityInt);
-    const value = quantity * 50;
-    console.log("value", value);
-    const valueInWei = web3.utils.toWei(value, "ether");
-    console.log("valueInWei", valueInWei);
-    const txApprove = await handleApprove(valueInWei);
-    if (txApprove) {
-      await buyIdo(wallet, quantity);
-      await handleBoughtSlots();
-    }
-  };
-
-  const handleBoughtSlots = async () => {
-    const slots = await getBoughtSlots();
-    // setBoughtSlots(slots);
-    onUpdateSlots(slots);
-  };
-
-  return (
-    <div>
-      <Modal
-        keepMounted
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="keep-mounted-modal-title"
-        aria-describedby="keep-mounted-modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 1175 * ratio,
-            height: 569 * ratio,
-            backgroundImage: `url(${backgroudPop})`, // Thay đổi đường dẫn đến hình ảnh của bạn
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <Typography
-            id="quantity"
-            className="text-bold absolute"
-            style={{
-              fontSize: 50 * ratio,
-              top: 210 * ratio,
-              left: 135 * ratio,
-            }}
-            variant="h3"
-            component="h2"
-          >
-            Quantity(slots)
-          </Typography>
-          <a>
-            <img
-              src={minusbt}
-              className="absolute"
-              alt="minusbt"
-              style={{
-                height: 56 * ratio,
-                width: 57 * ratio,
-                top: 210 * ratio,
-                left: 640 * ratio,
-              }}
-            />
-          </a>
+                }}>
+                    <Typography id="quantity" className='text-bold absolute' style={{ fontSize: 50 * ratio, top: 210 * ratio, left: 135 * ratio }} variant="h3" component="h2">
+                        Quantity(slots)
+                    </Typography>
+                    <a className="button"  onClick={() => handleMinusClick(false)}><img src={minusbt} className='absolute' alt="minusbt" style={{ height: 56 * ratio, width: 57 * ratio,top: 210 * ratio, left: 640 * ratio  }} /></a>
 
           <img
             src={textfield}
@@ -124,19 +85,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
             }}
           />
 
-          <a>
-            <img
-              src={plusbt}
-              className="absolute"
-              alt="plusbt"
-              style={{
-                height: 56 * ratio,
-                width: 57 * ratio,
-                top: 210 * ratio,
-                left: 1055 * ratio,
-              }}
-            />{" "}
-          </a>
+                    <a className="button"  onClick={() => handleMinusClick(true)}><img src={plusbt}  className='absolute'  alt="plusbt" style={{ height: 56 * ratio, width: 57 * ratio,top: 210 * ratio, left: 1055 * ratio }} /> </a>
 
           <Typography
             id="number"
@@ -180,48 +129,16 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots }) => {
             3000 APX
           </Typography>
 
-          <Typography
-            id="price"
-            className="text-bold absolute"
-            style={{
-              fontSize: 50 * ratio,
-              top: 350 * ratio,
-              left: 680 * ratio,
-            }}
-            variant="h3"
-            component="h2"
-          >
-            Price:
-          </Typography>
-          <Typography
-            id="receive"
-            className="text-bold absolute"
-            style={{
-              fontSize: 50 * ratio,
-              top: 350 * ratio,
-              left: 820 * ratio,
-            }}
-            variant="h3"
-            component="h2"
-          >
-            150 USD
-          </Typography>
-          <a>
-            <img
-              src={bt}
-              className="absolute"
-              alt="bt"
-              style={{
-                height: 76 * ratio,
-                width: 285 * ratio,
-                top: 480 * ratio,
-                left: 455 * ratio,
-              }}
-              onClick={() => handleBuyIDO(1)}
-            />{" "}
-          </a>
-        </Box>
-      </Modal>
-    </div>
-  );
-};
+                    <Typography id="price" className='text-bold absolute' style={{ fontSize: 50 * ratio, top: 350 * ratio, left: 680 * ratio }} variant="h3" component="h2">
+                        Price:
+                    </Typography>
+                    <Typography id="receive" className='text-bold absolute' style={{ fontSize: 50 * ratio, top: 350 * ratio, left:820 * ratio }} variant="h3" component="h2">
+                        150 USD
+                    </Typography>
+                    <a  className="button"><img src={bt}  className='absolute'  alt="bt" style={{ height: 76 * ratio, width: 285 * ratio,top: 480 * ratio, left:455 * ratio}} /> </a>
+
+                </Box>
+            </Modal>
+        </div>
+    );
+}

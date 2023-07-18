@@ -61,6 +61,9 @@ function App() {
     connectWallet();
   }, [walletAddress]);
 
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
   return (
     <div
       id="root"
@@ -76,7 +79,7 @@ function App() {
       <Info />
       <Startin slots={boughtSlots} />
       {walletAddress ? (
-        <a>
+        <a className="button" onClick={handleModal}>
           <img
             src={purchaseButton}
             className="absolute"
@@ -87,16 +90,15 @@ function App() {
               top: 2610 * ratio,
               left: 760 * ratio,
             }}
-            onClick={handleModal}
           />
           {/* <PurchaseModal isOpened={true} wallet={walletAddress} /> */}
-          {modalOpen && walletAddress && (
+          {/* {modalOpen && walletAddress && (
             <PurchaseModal
               isOpened={modalOpen}
               wallet={walletAddress}
               onUpdateSlots={handleBoughtSlots}
             />
-          )}
+          )} */}
         </a>
       ) : (
         <a>
@@ -116,6 +118,13 @@ function App() {
       )}
       ;
       <Vestingschedule />
+      <PurchaseModal
+        isOpened={modalOpen}
+        wallet={walletAddress}
+        onUpdateSlots={handleBoughtSlots}
+        onClose={handleCloseModal}
+      />
+      <Popup />
       <img
         src={logo}
         className="absolute"
