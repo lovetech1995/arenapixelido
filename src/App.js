@@ -104,7 +104,7 @@ function App() {
       <Info />
       <Startin slots={boughtSlots} />
       {walletAddress ? (
-        <a href="#" className="button" onClick={handleTimeBuy}>
+        <a  className="button" onClick={handleTimeBuy}>
           <img
             src={purchaseButton}
             className="absolute"
@@ -118,7 +118,7 @@ function App() {
           />
         </a>
       ) : (
-        <a href="#">
+        <a >
           <img
             src={connectbutton}
             className="absolute"
