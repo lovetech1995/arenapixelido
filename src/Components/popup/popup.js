@@ -21,21 +21,21 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
   const [approved, setApproved] = useState(false);
   //   const [boughtSlots, setBoughtSlots] = useState(0);
 
-  const handleOpen = async () => setOpen(true);
-  const handleClose = async () => {
-    setOpen(false);
-    isOpened = false;
-    console.log("open", isOpened);
-  };
+  //   const handleOpen = async () => setOpen(true);
+  //   const handleClose = async () => {
+  //     setOpen(false);
+  //     isOpened = false;
+  //     console.log("open", isOpened);
+  //   };
 
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
-  useEffect(() => {
-    if (isOpened) {
-      handleOpen();
-    }
-  }, []);
+  //   useEffect(() => {
+  //     if (isOpened) {
+  //       handleOpen();
+  //     }
+  //   }, []);
 
   const handleMinusClick = (check) => {
     var number = document.getElementById("number").innerText;
