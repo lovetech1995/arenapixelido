@@ -2,19 +2,46 @@ import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
 import connectbutton from "./image/connectbutton.png";
+import purchaseButton from "./image/purchaseButton.png";
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
-import { getApprove } from "../../hooks/getApprove";
-import { buyIdo } from "../../hooks/buyIdo";
+// import { getApprove } from "../../hooks/getApprove";
+// import { buyIdo } from "../../hooks/buyIdo";
+import Popup from "../popup/popup";
 
-const Startin = () => {
+const Startin = ({ slots }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
+  const [walletAddress, setWalletAddress] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [startTimePayment, setStartTimePayment] = useState("");
   const [endTimePayment, setEndTimePayment] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
+  // const [approved, setApproved] = useState(false);
+
+  // const connectWallet = async () => {
+  //   let provider = window.ethereum;
+
+  //   if (typeof provider !== "undefined") {
+  //     provider
+  //       .request({ method: "eth_requestAccounts" })
+  //       .then((accounts) => {
+  //         setWalletAddress(accounts[0]);
+  //         console.log(`Selected account is ${walletAddress}`);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         return;
+  //       });
+
+  //     window.ethereum.on("accountsChanged", function (accounts) {
+  //       setWalletAddress(accounts[0]);
+  //       console.log(`Selected account changed to ${walletAddress}`);
+  //     });
+  //   }
+  //   // setInitial(true);
+  // };
 
   const fetchInformations = async () => {
     try {
@@ -30,22 +57,20 @@ const Startin = () => {
     }
   };
 
-  //   const handleApprove = async () => {
-  //     await getApprove(walletAddress);
-  //   };
-
-  //   const handleBuyIDO = async (quantity) => {
-  //     await buyIdo(walletAddress, quantity);
-  //     await handleBoughtSlots();
-  //   };
-
   const handleBoughtSlots = async () => {
     const boughtSlots = await getBoughtSlots();
     setBoughtSlots(boughtSlots);
   };
 
   useEffect(() => {
+    handleBoughtSlots();
+  }, [slots]);
+
+  useEffect(() => {
     fetchInformations();
+  }, []);
+
+  useEffect(() => {
     const targetDate = "2023-12-31T23:59:59";
     // isLoading ?? startTimePayment
     // const targetDate = startTimePayment; //11249560
@@ -210,19 +235,38 @@ const Startin = () => {
       >
         Second
       </p>
-      <a>
-        <img
-          src={connectbutton}
-          className="absolute"
-          alt="connectbutton"
-          style={{
-            height: 76 * ratio,
-            width: 386 * ratio,
-            top: 2610 * ratio,
-            left: 760 * ratio,
-          }}
-        />
-      </a>
+      {/* {walletAddress ? (
+        <a>
+          <img
+            src={purchaseButton}
+            className="absolute"
+            alt="purchase"
+            style={{
+              height: 76 * ratio,
+              width: 386 * ratio,
+              top: 2610 * ratio,
+              left: 760 * ratio,
+            }}
+            onClick={connectWallet}
+          />
+        </a>
+      ) : (
+        <a>
+          <img
+            src={connectbutton}
+            className="absolute"
+            alt="connectbutton"
+            style={{
+              height: 76 * ratio,
+              width: 386 * ratio,
+              top: 2610 * ratio,
+              left: 760 * ratio,
+            }}
+            onClick={connectWallet}
+          />
+        </a>
+      )}
+      ; */}
       <table
         className="absolute text-while"
         style={{
