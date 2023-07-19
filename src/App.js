@@ -14,7 +14,7 @@ import { PurchaseModal } from "./Components/popup/popup";
 import { getStartTime, getEndTime } from "./hooks/getPaymentTime";
 
 function App() {
-  const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 1908 });
+  const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 1080 });
   const { rotate, width, height, marginLeft, ratio } = size;
   const [provider, setProvider] = useState(null);
   const [isnetWork, setIsNetwork] = useState(false);
@@ -168,7 +168,7 @@ function App() {
       <Info />
       <Startin isnetWork={isnetWork} slots={boughtSlots} />
       {walletAddress ? (
-        isEndedIdo() ? (
+        !isEndedIdo() ? (
           <a className="button" onClick={handleTimeBuy}>
             <img
               src={purchaseButton}
@@ -193,9 +193,9 @@ function App() {
             alt="connectbutton"
             style={{
               height: 80 * ratio,
-                width: 350 * ratio,
-                top: 1590 * ratio,
-                left: 760 * ratio,
+              width: 350 * ratio,
+              top: 1590 * ratio,
+              left: 760 * ratio,
             }}
             onClick={connectWallet}
           />
@@ -209,7 +209,6 @@ function App() {
         onUpdateSlots={handleBoughtSlots}
         onClose={handleCloseModal}
       />
-      
     </div>
   );
 }

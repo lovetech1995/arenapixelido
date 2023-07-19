@@ -16,7 +16,7 @@ const Startin = ({ isnetWork, slots }) => {
   const [endTimePayment, setEndTimePayment] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
 
-  const currentTime = new Date().getTime() / 1000;
+  const [currentTime, setCurrentTime] = useState(new Date().getTime() / 1000);
 
   // const fetchInformations = async () => {
   //   try {
@@ -31,6 +31,20 @@ const Startin = ({ isnetWork, slots }) => {
   //     setIsLoading(false);
   //   }
   // };
+
+  useEffect(() => {
+    // Update the current time every second
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().getTime() / 1000);
+      if (currentTime > parseInt(endTimePayment)) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [endTimePayment]);
 
   useEffect(() => {
     if (isnetWork) {
@@ -74,8 +88,8 @@ const Startin = ({ isnetWork, slots }) => {
     if (
       startTimePayment &&
       endTimePayment &&
-      currentTime > startTimePayment &&
-      currentTime < endTimePayment
+      currentTime > parseInt(startTimePayment) &&
+      currentTime < parseInt(endTimePayment)
     ) {
       return true;
     }
@@ -83,7 +97,7 @@ const Startin = ({ isnetWork, slots }) => {
   };
 
   const beforeTimeBuy = () => {
-    if (startTimePayment && currentTime < startTimePayment) {
+    if (startTimePayment && currentTime < parseInt(startTimePayment)) {
       return true;
     }
     return false;
@@ -103,18 +117,14 @@ const Startin = ({ isnetWork, slots }) => {
   }, [isnetWork, currentTime]);
 
   useEffect(() => {
-    // const startDate = "2023-07-19T11:00:00";
-    // const endDate = "2023-07-20T11:00:00";
     if (isnetWork) {
       const startDate = parseInt(startTimePayment);
+      console.log(startDate - currentTime);
       console.log({ currentTime });
       const endDate = parseInt(endTimePayment);
-      // isLoading ?? startTimePayment
-      // const targetDate = startTimePayment; //11249560
-      if (currentTime < startTimePayment) {
+      if (currentTime < startDate) {
         countdownStart(startDate);
-      } else if (currentTime < endTimePayment) {
-        console.log({ currentTime });
+      } else if (currentTime < endDate) {
         console.log({ endTimePayment });
         countdownEnd(endDate);
       }
@@ -122,11 +132,12 @@ const Startin = ({ isnetWork, slots }) => {
   }, [isnetWork, currentTime]);
 
   function countdownStart(targetDate) {
-    const now = new Date().getTime() / 1000;
+    const now = new Date().getTime();
     const endDate = targetDate * 1000;
-    const distance = endDate - endDate;
+    const distance = endDate - now;
 
     if (distance <= 0) {
+      window.location.reload();
       console.log("Time out!");
       return;
     }
@@ -179,6 +190,36 @@ const Startin = ({ isnetWork, slots }) => {
     }, 1000);
   }
 
+  function countdownEnd(targetDate) {
+    const now = new Date().getTime();
+    const endDate = targetDate * 1000;
+    const distance = endDate - now;
+    console.log({ distance });
+
+    if (distance <= 0) {
+      console.log("Time out!");
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    console.log({ days });
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("day").innerText = days;
+    document.getElementById("hour").innerText = hours;
+    document.getElementById("minute").innerText = minutes;
+    document.getElementById("second").innerText = seconds;
+
+    // Chờ 1 giây và gọi lại hàm countdown
+    setTimeout(() => {
+      countdownEnd(targetDate);
+    }, 1000);
+  }
+
   // Đảm bảo DOM đã được tải hoàn toàn trước khi gán sự kiện lắng nghe
   function copyToClipboard(textToCopy) {
     // Tạo một phần tử input tạm thời để chứa nội dung cần sao chép
@@ -194,14 +235,11 @@ const Startin = ({ isnetWork, slots }) => {
 
     // Xóa input tạm thời
     document.body.removeChild(tempInput);
-}
-
-
-
+  }
 
   return (
     <div>
-      {console.log({ beforeTimeBuy })}
+      {/* {console.log({ beforeTimeBuy })} */}
       {beforeTimeBuy() === true ? (
         <p
           className="absolute text"
@@ -209,7 +247,7 @@ const Startin = ({ isnetWork, slots }) => {
             fontSize: 65 * ratio,
             top: 850 * ratio,
             left: 795 * ratio,
-            fontStyle:"italic"
+            fontStyle: "italic",
           }}
         >
           START - IN
@@ -221,7 +259,7 @@ const Startin = ({ isnetWork, slots }) => {
             fontSize: 65 * ratio,
             top: 850 * ratio,
             left: 820 * ratio,
-            fontStyle:"italic"
+            fontStyle: "italic",
           }}
         >
           END - IN
@@ -233,7 +271,7 @@ const Startin = ({ isnetWork, slots }) => {
           fontSize: 65 * ratio,
           top: 850 * ratio,
           left: 820 * ratio,
-          fontStyle:"italic"
+          fontStyle: "italic",
         }}
       ></p>
       <img
@@ -399,16 +437,28 @@ const Startin = ({ isnetWork, slots }) => {
               <p className="let-right">Contract</p>
             </td>
             <td className="text-right">
-              
-             <a
+              <a
                 href="https://testnet.bscscan.com/address/0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b"
                 className="text-hiden"
                 target="_blank"
-                style={{paddingRight:10*ratio}}
+                style={{ paddingRight: 10 * ratio }}
               >
                 0x875fb...ff85b
               </a>
-              <button onClick={copyToClipboard('0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b') } style={{backgroundColor:'transparent'}}> <img id="copyimg" className="button" src={copy} style={{height:20*ratio,width:20*ratio}} /> </button>
+              <button
+                onClick={copyToClipboard(
+                  "0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b"
+                )}
+                style={{ backgroundColor: "transparent" }}
+              >
+                {" "}
+                <img
+                  id="copyimg"
+                  className="button"
+                  src={copy}
+                  style={{ height: 20 * ratio, width: 20 * ratio }}
+                />{" "}
+              </button>
             </td>
           </tr>
           <tr>
