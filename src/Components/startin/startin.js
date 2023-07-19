@@ -2,6 +2,7 @@ import "../../App.css";
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
+// import FileCopyIcon from "@mui/icons-material/FileCopy";
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 
@@ -14,19 +15,21 @@ const Startin = ({ isnetWork, slots }) => {
   const [endTimePayment, setEndTimePayment] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
 
-  const fetchInformations = async () => {
-    try {
-      // const startTime = await getStartTime();
-      // setStartTimePayment(startTime);
-      // const endTime = await getEndTime();
-      // setEndTimePayment(endTime);
-      // handleBoughtSlots();
-      setIsLoading(false);
-    } catch (error) {
-      // Handle error
-      setIsLoading(false);
-    }
-  };
+  const currentTime = new Date().getTime() / 1000;
+
+  // const fetchInformations = async () => {
+  //   try {
+  //     // const startTime = await getStartTime();
+  //     // setStartTimePayment(startTime);
+  //     // const endTime = await getEndTime();
+  //     // setEndTimePayment(endTime);
+  //     // handleBoughtSlots();
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     // Handle error
+  //     setIsLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     if (isnetWork) {
@@ -66,29 +69,61 @@ const Startin = ({ isnetWork, slots }) => {
     }
   };
 
+  const isTimeBuy = async () => {
+    if (
+      startTimePayment &&
+      endTimePayment &&
+      currentTime > startTimePayment &&
+      currentTime < endTimePayment
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const beforeTimeBuy = async () => {
+    if (startTimePayment && currentTime < startTimePayment) {
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     if (isnetWork) {
       handleBoughtSlots();
     }
   }, [isnetWork, slots]);
 
-  // useEffect(() => {
-  //   if (isnetWork) {
-  //     fetchInformations();
-  //   }
-  // }, [isnetWork]);
+  useEffect(() => {
+    if (isnetWork) {
+      beforeTimeBuy();
+      isTimeBuy();
+    }
+  }, [isnetWork, currentTime]);
 
   useEffect(() => {
-    const targetDate = "2023-07-19T11:00:00";
-    // isLoading ?? startTimePayment
-    // const targetDate = startTimePayment; //11249560
-    countdown(targetDate);
-  }, []);
+    // const startDate = "2023-07-19T11:00:00";
+    // const endDate = "2023-07-20T11:00:00";
+    if (isnetWork) {
+      const startDate = parseInt(startTimePayment);
+      console.log({ currentTime });
+      const endDate = parseInt(endTimePayment);
+      // isLoading ?? startTimePayment
+      // const targetDate = startTimePayment; //11249560
+      if (currentTime < startTimePayment) {
+        countdownStart(startDate);
+      } else if (currentTime < endTimePayment) {
+        console.log({ currentTime });
+        console.log({ endTimePayment });
+        countdownEnd(endDate);
+      }
+    }
+  }, [isnetWork, currentTime]);
 
-  function countdown(targetDate) {
-    const now = new Date().getTime();
-    const endDate = new Date(targetDate).getTime();
-    const distance = endDate - now;
+  function countdownStart(targetDate) {
+    const now = new Date().getTime() / 1000;
+    const endDate = targetDate * 1000;
+    const distance = endDate - endDate;
 
     if (distance <= 0) {
       console.log("Time out!");
@@ -109,18 +144,70 @@ const Startin = ({ isnetWork, slots }) => {
 
     // Chờ 1 giây và gọi lại hàm countdown
     setTimeout(() => {
-      countdown(targetDate);
+      countdownStart(targetDate);
+    }, 1000);
+  }
+
+  function countdownEnd(targetDate) {
+    const now = new Date().getTime();
+    const endDate = targetDate * 1000;
+    const distance = endDate - now;
+    console.log({ distance });
+
+    if (distance <= 0) {
+      console.log("Time out!");
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    console.log({ days });
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("day").innerText = days;
+    document.getElementById("hour").innerText = hours;
+    document.getElementById("minute").innerText = minutes;
+    document.getElementById("second").innerText = seconds;
+
+    // Chờ 1 giây và gọi lại hàm countdown
+    setTimeout(() => {
+      countdownEnd(targetDate);
     }, 1000);
   }
 
   return (
     <div>
+      {console.log({ beforeTimeBuy })}
+      {!!beforeTimeBuy() ? (
+        <p
+          className="absolute text"
+          style={{
+            fontSize: 100 * ratio,
+            top: 1690 * ratio,
+            left: 710 * ratio,
+          }}
+        >
+          START - IN
+        </p>
+      ) : (
+        <p
+          className="absolute text"
+          style={{
+            fontSize: 100 * ratio,
+            top: 1690 * ratio,
+            left: 710 * ratio,
+          }}
+        >
+          END - IN
+        </p>
+      )}
       <p
         className="absolute text"
         style={{ fontSize: 100 * ratio, top: 1690 * ratio, left: 710 * ratio }}
-      >
-        START - IN
-      </p>
+      ></p>
       <img
         src={squaretime}
         className="absolute"
@@ -236,38 +323,7 @@ const Startin = ({ isnetWork, slots }) => {
       >
         Second
       </p>
-      {/* {walletAddress ? (
-        <a>
-          <img
-            src={purchaseButton}
-            className="absolute"
-            alt="purchase"
-            style={{
-              height: 76 * ratio,
-              width: 386 * ratio,
-              top: 2610 * ratio,
-              left: 760 * ratio,
-            }}
-            onClick={connectWallet}
-          />
-        </a>
-      ) : (
-        <a>
-          <img
-            src={connectbutton}
-            className="absolute"
-            alt="connectbutton"
-            style={{
-              height: 76 * ratio,
-              width: 386 * ratio,
-              top: 2610 * ratio,
-              left: 760 * ratio,
-            }}
-            onClick={connectWallet}
-          />
-        </a>
-      )}
-      ; */}
+
       <table
         className="absolute text-while custom-table"
         style={{
@@ -309,7 +365,7 @@ const Startin = ({ isnetWork, slots }) => {
             {isLoading ? (
               <td className="text-right">Loading...</td>
             ) : (
-              <td className="text-right">{boughtSlots.toString()}</td>
+              <td className="text-right">{boughtSlots.toString()} slots</td>
             )}
             <td className="text-right">
               <p className="let-right">Contract</p>
@@ -329,7 +385,9 @@ const Startin = ({ isnetWork, slots }) => {
             {isLoading ? (
               <td className="text-right">Loading...</td>
             ) : (
-              <td className="text-right">{(4000 - boughtSlots).toString()}</td>
+              <td className="text-right">
+                {(4000 - boughtSlots).toString()} APX
+              </td>
             )}
             <td className="text-right">
               <p className="let-right">Allocating per slot</p>

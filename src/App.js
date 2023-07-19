@@ -71,14 +71,26 @@ function App() {
     await fetchTime();
     const currentTime = new Date().getTime() / 1000;
     if (startTimePayment && currentTime < startTimePayment) {
+      console.log("startTimePayment", startTimePayment);
       alert("You can't buy before IDO time");
       return false;
     }
-    if (endTimePayment && currentTime > endTimePayment) {
-      alert("IDO time is finished");
-      return false;
-    }
+    // else if (endTimePayment && currentTime > endTimePayment) {
+    //   console.log("endTimePayment", endTimePayment);
+    //   // alert("IDO time is finished");
+    //   return false;
+    // }
     return true;
+  };
+
+  const isEndedIdo = async () => {
+    await fetchTime();
+    const currentTime = new Date().getTime() / 1000;
+    if (endTimePayment && currentTime > endTimePayment) {
+      console.log("endTimePayment", endTimePayment);
+      return true;
+    }
+    return false;
   };
 
   const handleOpenModal = () => {
@@ -156,19 +168,23 @@ function App() {
       <Info />
       <Startin isnetWork={isnetWork} slots={boughtSlots} />
       {walletAddress ? (
-        <a className="button" onClick={handleTimeBuy}>
-          <img
-            src={purchaseButton}
-            className="absolute"
-            alt="purchase"
-            style={{
-              height: 76 * ratio,
-              width: 386 * ratio,
-              top: 2310 * ratio,
-              left: 760 * ratio,
-            }}
-          />
-        </a>
+        !isEndedIdo() ? (
+          <a className="button" onClick={handleTimeBuy}>
+            <img
+              src={purchaseButton}
+              className="absolute"
+              alt="purchase"
+              style={{
+                height: 76 * ratio,
+                width: 386 * ratio,
+                top: 2310 * ratio,
+                left: 760 * ratio,
+              }}
+            />
+          </a>
+        ) : (
+          <a></a>
+        )
       ) : (
         <a>
           <img
