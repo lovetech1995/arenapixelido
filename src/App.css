@@ -16,6 +16,7 @@
   text-align: center;
   color: white;
 }
+
 .boder{
   border: 1px white solid;
 }
@@ -33,4 +34,24 @@
 
 .button:hover {
   cursor: pointer;
+}
+.text-hiden {
+  text-decoration: none; 
+  color: white; 
+}
+.text-left{
+  text-align: left;
+}
+.text-right{
+  text-align: right;
+}
+.custom-table {
+  border-collapse: separate;
+  border-spacing: 0 50px 0 50px; 
+}
+.let-right{
+  float: right;
+  text-align: left;
+  width: 55%;
+ 
 }

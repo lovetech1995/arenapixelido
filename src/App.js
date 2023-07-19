@@ -12,7 +12,7 @@ import { PurchaseModal } from "./Components/popup/popup";
 import { getStartTime, getEndTime } from "./hooks/getPaymentTime";
 
 function App() {
-  const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
+  const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3106 });
   const { rotate, width, height, marginLeft, ratio } = size;
 
  
@@ -112,7 +112,7 @@ function App() {
             style={{
               height: 76 * ratio,
               width: 386 * ratio,
-              top: 2610 * ratio,
+              top: 2310 * ratio,
               left: 760 * ratio,
             }}
           />
@@ -126,14 +126,14 @@ function App() {
             style={{
               height: 76 * ratio,
               width: 386 * ratio,
-              top: 2610 * ratio,
+              top: 2310 * ratio,
               left: 760 * ratio,
             }}
             onClick={connectWallet}
           />
         </a>
       )}
-      ;
+      
       <Vestingschedule wallet={walletAddress} />
       <PurchaseModal
         isOpened={modalOpen}
@@ -148,7 +148,7 @@ function App() {
         style={{
           height: 234 * ratio,
           width: 512 * ratio,
-          top: 3150 * ratio,
+          top: 2850 * ratio,
           left: 700 * ratio,
         }}
       />

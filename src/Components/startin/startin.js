@@ -1,3 +1,4 @@
+import "../../App.css";
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
@@ -105,7 +106,7 @@ const Startin = ({ slots }) => {
     <div>
       <p
         className="absolute text"
-        style={{ fontSize: 100 * ratio, top: 1990 * ratio, left: 710 * ratio }}
+        style={{ fontSize: 100 * ratio, top: 1690 * ratio, left: 710 * ratio }}
       >
         START - IN
       </p>
@@ -116,7 +117,7 @@ const Startin = ({ slots }) => {
         style={{
           height: 129 * ratio,
           width: 758 * ratio,
-          top: 2150 * ratio,
+          top: 1850 * ratio,
           left: 545 * ratio,
         }}
       />
@@ -127,7 +128,7 @@ const Startin = ({ slots }) => {
           height: 126 * ratio,
           width: 142 * ratio,
           fontSize: 80 * ratio,
-          top: 2150 * ratio,
+          top: 1850 * ratio,
           left: 546 * ratio,
         }}
       >
@@ -140,7 +141,7 @@ const Startin = ({ slots }) => {
           height: 35 * ratio,
           width: 142 * ratio,
           fontSize: 30 * ratio,
-          top: 2240 * ratio,
+          top: 1940 * ratio,
           left: 545 * ratio,
         }}
       >
@@ -153,7 +154,7 @@ const Startin = ({ slots }) => {
           height: 126 * ratio,
           width: 142 * ratio,
           fontSize: 80 * ratio,
-          top: 2150 * ratio,
+          top: 1850 * ratio,
           left: 750 * ratio,
         }}
       >
@@ -166,7 +167,7 @@ const Startin = ({ slots }) => {
           height: 35 * ratio,
           width: 142 * ratio,
           fontSize: 30 * ratio,
-          top: 2240 * ratio,
+          top: 1940 * ratio,
           left: 750 * ratio,
         }}
       >
@@ -179,7 +180,7 @@ const Startin = ({ slots }) => {
           height: 126 * ratio,
           width: 142 * ratio,
           fontSize: 80 * ratio,
-          top: 2150 * ratio,
+          top: 1850 * ratio,
           left: 954 * ratio,
         }}
       >
@@ -192,7 +193,7 @@ const Startin = ({ slots }) => {
           height: 35 * ratio,
           width: 142 * ratio,
           fontSize: 30 * ratio,
-          top: 2240 * ratio,
+          top: 1940 * ratio,
           left: 954 * ratio,
         }}
       >
@@ -205,7 +206,7 @@ const Startin = ({ slots }) => {
           height: 126 * ratio,
           width: 142 * ratio,
           fontSize: 80 * ratio,
-          top: 2150 * ratio,
+          top: 1850 * ratio,
           left: 1158 * ratio,
         }}
       >
@@ -218,7 +219,7 @@ const Startin = ({ slots }) => {
           height: 35 * ratio,
           width: 142 * ratio,
           fontSize: 30 * ratio,
-          top: 2240 * ratio,
+          top: 1940 * ratio,
           left: 1158 * ratio,
         }}
       >
@@ -256,13 +257,13 @@ const Startin = ({ slots }) => {
         </a>
       )}
       ; */}
-      <table
-        className="absolute text-while"
+      <table 
+        className="absolute text-while custom-table"
         style={{
           fontSize: 30 * ratio,
           height: 300 * ratio,
           width: 1500 * ratio,
-          top: 2300 * ratio,
+          top: 2000 * ratio,
           left: 150 * ratio,
         }}
       >
@@ -276,38 +277,38 @@ const Startin = ({ slots }) => {
         </thead>
         <tbody>
           <tr>
-            <td>Total</td>
-            <td>4,000,000 APX</td>
-            <td>Token Name</td>
-            <td>Arena Pixel</td>
+            <td className="text-left">Total</td>
+            <td className="text-right">4,000,000 APX</td>
+            <td className="text-right" > <p  className="let-right">Token Name</p></td>
+            <td className="text-right">Arena Pixel</td>
           </tr>
           <tr>
-            <td>Allwance</td>
-            <td>4000 slots</td>
-            <td>Symbol</td>
-            <td>APX</td>
+            <td className="text-left">Allwance</td>
+            <td className="text-right">4000 slots</td>
+            <td className="text-right"><p  className="let-right">Symbol</p></td>
+            <td className="text-right">APX</td>
           </tr>
           <tr>
-            <td>Purchased</td>
+            <td className="text-left">Purchased</td>
             {isLoading ? (
-              <td>Loading...</td>
+              <td className="text-right">Loading...</td>
             ) : (
-              <td>{boughtSlots.toString()}</td>
+              <td className="text-right">{boughtSlots.toString()}</td>
             )}
-            <td>Contract</td>
-            <td>
-              <a>df68g...dhg5b</a>
+            <td  className="text-right"><p  className="let-right">Contract</p></td>
+            <td className="text-right">
+              <a  href="https://testnet.bscscan.com/address/0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b" className="text-hiden" target="_blank">0x875fb...ff85b</a>
             </td>
           </tr>
           <tr>
-            <td>Available</td>
+            <td className="text-left">Available</td>
             {isLoading ? (
-              <td>Loading...</td>
+              <td className="text-right">Loading...</td>
             ) : (
-              <td>{(4000 - boughtSlots).toString()}</td>
+              <td className="text-right">{(4000 - boughtSlots).toString()}</td>
             )}
-            <td>Allocating per slot</td>
-            <td>50 USDT ~ 1000 APX</td>
+            <td className="text-right" ><p  className="let-right">Allocating per slot</p></td>
+            <td className="text-right">50 USDT ~ 1000 APX</td>
           </tr>
         </tbody>
       </table>

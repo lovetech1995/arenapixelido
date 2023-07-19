@@ -100,6 +100,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
             backgroundImage: `url(${backgroudPop})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
+            outline:"none",
           }}
         >
           <Typography

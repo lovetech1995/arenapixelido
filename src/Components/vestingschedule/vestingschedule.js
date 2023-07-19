@@ -111,7 +111,7 @@ export const Vestingschedule = ({ wallet }) => {
     <div>
       <p
         className="absolute text "
-        style={{ fontSize: 60 * ratio, top: 2715 * ratio, left: 670 * ratio }}
+        style={{ fontSize: 60 * ratio, top: 2415 * ratio, left: 670 * ratio }}
       >
         VESTING SCHEDULE
       </p>
@@ -121,7 +121,7 @@ export const Vestingschedule = ({ wallet }) => {
           fontSize: 23 * ratio,
           height: 360 * ratio,
           width: 1500 * ratio,
-          top: 2800 * ratio,
+          top: 2500 * ratio,
           left: 150 * ratio,
         }}
       >

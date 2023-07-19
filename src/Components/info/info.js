@@ -22,20 +22,20 @@ const Info = () => {
         style={{
           height: 234 * ratio,
           width: 1607 * ratio,
-          top: 300 * ratio,
+          top: 50 * ratio,
           left: 120 * ratio,
         }}
       />
       <p
         className="absolute  text"
-        style={{ fontSize: 36 * ratio, top: 700 * ratio, left: 200 * ratio }}
+        style={{ fontSize: 36 * ratio, top: 400 * ratio, left: 200 * ratio }}
       >
         GameFi Tap to Earn NFT, with a completely unique gameplay and
         money-making method,
         <br />
         promises to evoke a plethora of emotions for users
       </p>
-      <a href={"https://arenapixel.io/"}>
+      <a target="_blank" href={"https://arenapixel.io/"}>
         <img
           src={webbuton}
           className="absolute"
@@ -43,12 +43,12 @@ const Info = () => {
           style={{
             height: 83 * ratio,
             width: 83 * ratio,
-            top: 850 * ratio,
+            top: 550 * ratio,
             left: 760 * ratio,
           }}
         />
       </a>
-      <a href={"https://t.me/arenapixel"}>
+      <a target="_blank" href={"https://t.me/arenapixel"}>
         <img
           src={telegrambutton}
           className="absolute"
@@ -56,12 +56,12 @@ const Info = () => {
           style={{
             height: 83 * ratio,
             width: 83 * ratio,
-            top: 850 * ratio,
+            top: 550 * ratio,
             left: 890 * ratio,
           }}
         />
       </a>
-      <a href={"https://twitter.com/ArenaPixel"}>
+      <a target="_blank" href={"https://twitter.com/ArenaPixel"}>
         <img
           src={twtbutton}
           className="absolute"
@@ -69,13 +69,13 @@ const Info = () => {
           style={{
             height: 83 * ratio,
             width: 83 * ratio,
-            top: 850 * ratio,
+            top: 550 * ratio,
             left: 1030 * ratio,
           }}
         />
       </a>
 
-      <a href="#">
+      <a target="_blank" href="https://market.arenapixel.io/">
         <img
           src={marrketplace}
           className="absolute"
@@ -83,12 +83,12 @@ const Info = () => {
           style={{
             height: 100 * ratio,
             width: 359 * ratio,
-            top: 900 * ratio,
+            top: 600 * ratio,
             left: 150 * ratio,
           }}
         />
       </a>
-      <a href="#">
+      <a target="_blank" href="https://arenapixel.io/pitchdeck.html">
         <img
           src={pitchdeck}
           className="absolute"
@@ -96,12 +96,12 @@ const Info = () => {
           style={{
             height: 100 * ratio,
             width: 359 * ratio,
-            top: 870 * ratio,
+            top: 570 * ratio,
             left: 1390 * ratio,
           }}
         />
       </a>
-      <a href="#">
+      <a target="_blank" href="https://arenapixels-organization.gitbook.io/arena-pixel-whitepaper/">
         <img
           src={wwhitpaper}
           className="absolute"
@@ -109,12 +109,12 @@ const Info = () => {
           style={{
             height: 100 * ratio,
             width: 359 * ratio,
-            top: 1030 * ratio,
+            top: 730 * ratio,
             left: 150 * ratio,
           }}
         />
       </a>
-      <a href="#">
+      <a target="_blank" href="https://testnet.arenapixel.io/">
         <img
           src={gamebt}
           className="absolute"
@@ -122,7 +122,7 @@ const Info = () => {
           style={{
             height: 100 * ratio,
             width: 359 * ratio,
-            top: 1000 * ratio,
+            top: 700 * ratio,
             left: 1390 * ratio,
           }}
         />
