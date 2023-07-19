@@ -1,6 +1,7 @@
 import "../../App.css";
 import React, { useState, useEffect } from "react";
 import { useWindowSize } from "../../useWindowSize";
+import claim from "./image/claimbutton.png";
 import disableClaim from "./image/disableClaim.png";
 import { getStageInfo } from "../../hooks/getStageInfo";
 import { getUserSlots } from "../../hooks/getUserSlots";
@@ -11,6 +12,7 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
+  const [currentTime, setCurrentTime] = useState(new Date().getTime() / 1000);
   const [isLoading, setIsLoading] = useState(true);
   const [stageInfo, setStageInfo] = useState([]);
   const [userSlots, setUserSlots] = useState(0);
@@ -43,7 +45,7 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
     setIsProcessing(true);
     try {
       const claimed = await handleUserClaimed(stage);
-      if (claimed) {
+      if (claimed === true) {
         window.alert("You have already claimed");
       } else {
         await claimIdo(wallet, stage);
@@ -68,6 +70,41 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
       setIsLoading(false);
     }
   };
+
+  const handleClaimButton = (stage) => {
+    console.log({ stageInfo });
+    if (
+      currentTime > parseInt(stageInfo[stage]._startTime) &&
+      currentTime < parseInt(stageInfo[stage]._endTime)
+    ) {
+      return (
+        <a>
+          <img
+            src={claim}
+            style={{ height: 36 * ratio, width: 112 * ratio }}
+            onClick={() =>
+              isProcessing ? null : handleClaimIdo(stageInfo[stage]._stageId)
+            }
+          />
+        </a>
+      );
+    } else {
+      return (
+        <a>
+          <img
+            src={disableClaim}
+            style={{ height: 36 * ratio, width: 112 * ratio }}
+          />
+        </a>
+      );
+    }
+  };
+
+  useEffect(() => {
+    for (let i = 0; i < stageInfo.length; i++) {
+      handleClaimButton(i);
+    }
+  }, [currentTime]);
 
   const formatTimestamp = (timestamp) => {
     // Convert the timestamp to a Date object
@@ -107,6 +144,20 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
       handleUserSlots();
     }
   }, [isnetWork, wallet]);
+
+  useEffect(() => {
+    // Update the current time every second
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().getTime() / 1000);
+      if (stageInfo && currentTime > parseInt(stageInfo[4]._endTime)) {
+        clearInterval(timer);
+      }
+    }, 3600000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   return (
     <div>
@@ -165,8 +216,9 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
             </tr>
           ) : (
             stageInfo.map((item) => {
-              console.log("userSlots", userSlots);
+              // const currentTime = new Date().getTime() / 1000;
               const [formattedTime, fullDay] = formatTimestamp(item._startTime);
+              // if()
               return (
                 <tr key={item._stageId}>
                   <td>
@@ -181,7 +233,7 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
                     APX
                   </td>
                   <td>
-                    <a>
+                    {/* <a>
                       <img
                         src={disableClaim}
                         style={{ height: 36 * ratio, width: 112 * ratio }}
@@ -189,7 +241,8 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
                         //   isProcessing ? null : handleClaimIdo(item._stageId)
                         // }
                       />
-                    </a>
+                    </a> */}
+                    {handleClaimButton(item._stageId)}
                   </td>
                 </tr>
               );

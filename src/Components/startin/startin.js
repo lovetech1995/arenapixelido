@@ -15,7 +15,7 @@ const Startin = ({ isnetWork, slots }) => {
   const [endTimePayment, setEndTimePayment] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
 
-  const currentTime = new Date().getTime() / 1000;
+  const [currentTime, setCurrentTime] = useState(new Date().getTime() / 1000);
 
   // const fetchInformations = async () => {
   //   try {
@@ -30,6 +30,20 @@ const Startin = ({ isnetWork, slots }) => {
   //     setIsLoading(false);
   //   }
   // };
+
+  useEffect(() => {
+    // Update the current time every second
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().getTime() / 1000);
+      if (currentTime > parseInt(endTimePayment)) {
+        clearInterval(timer);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, [endTimePayment]);
 
   useEffect(() => {
     if (isnetWork) {
@@ -73,8 +87,8 @@ const Startin = ({ isnetWork, slots }) => {
     if (
       startTimePayment &&
       endTimePayment &&
-      currentTime > startTimePayment &&
-      currentTime < endTimePayment
+      currentTime > parseInt(startTimePayment) &&
+      currentTime < parseInt(endTimePayment)
     ) {
       return true;
     }
@@ -82,7 +96,7 @@ const Startin = ({ isnetWork, slots }) => {
   };
 
   const beforeTimeBuy = () => {
-    if (startTimePayment && currentTime < startTimePayment) {
+    if (startTimePayment && currentTime < parseInt(startTimePayment)) {
       return true;
     }
     return false;
@@ -102,18 +116,14 @@ const Startin = ({ isnetWork, slots }) => {
   }, [isnetWork, currentTime]);
 
   useEffect(() => {
-    // const startDate = "2023-07-19T11:00:00";
-    // const endDate = "2023-07-20T11:00:00";
     if (isnetWork) {
       const startDate = parseInt(startTimePayment);
+      console.log(startDate - currentTime);
       console.log({ currentTime });
       const endDate = parseInt(endTimePayment);
-      // isLoading ?? startTimePayment
-      // const targetDate = startTimePayment; //11249560
-      if (currentTime < startTimePayment) {
+      if (currentTime < startDate) {
         countdownStart(startDate);
-      } else if (currentTime < endTimePayment) {
-        console.log({ currentTime });
+      } else if (currentTime < endDate) {
         console.log({ endTimePayment });
         countdownEnd(endDate);
       }
@@ -121,11 +131,12 @@ const Startin = ({ isnetWork, slots }) => {
   }, [isnetWork, currentTime]);
 
   function countdownStart(targetDate) {
-    const now = new Date().getTime() / 1000;
+    const now = new Date().getTime();
     const endDate = targetDate * 1000;
-    const distance = endDate - endDate;
+    const distance = endDate - now;
 
     if (distance <= 0) {
+      window.location.reload();
       console.log("Time out!");
       return;
     }
@@ -180,7 +191,7 @@ const Startin = ({ isnetWork, slots }) => {
 
   return (
     <div>
-      {console.log({ beforeTimeBuy })}
+      {/* {console.log({ beforeTimeBuy })} */}
       {beforeTimeBuy() === true ? (
         <p
           className="absolute text"

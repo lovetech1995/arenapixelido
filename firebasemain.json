@@ -1,7 +1,7 @@
 {
   "hosting": {
     "public": "build",
-    "site": "arena-pixel-ido-testnet",
+    "site": "ido-arenapixel",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
     "rewrites": [
       {
