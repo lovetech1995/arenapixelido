@@ -2,10 +2,12 @@ import "../../App.css";
 import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
+import copy from "./image/copy.png";
+import success from "./image/success.png";
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 
-const Startin = ({ slots }) => {
+const Startin = ({ isnetWork, slots }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
@@ -14,70 +16,115 @@ const Startin = ({ slots }) => {
   const [endTimePayment, setEndTimePayment] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
 
-  const fetchInformations = async () => {
-    try {
-      // const startTime = await getStartTime();
-      // setStartTimePayment(startTime);
-      // const endTime = await getEndTime();
-      // setEndTimePayment(endTime);
-      handleBoughtSlots();
-      setIsLoading(false);
-    } catch (error) {
-      // Handle error
+  const currentTime = new Date().getTime() / 1000;
+
+  // const fetchInformations = async () => {
+  //   try {
+  //     // const startTime = await getStartTime();
+  //     // setStartTimePayment(startTime);
+  //     // const endTime = await getEndTime();
+  //     // setEndTimePayment(endTime);
+  //     // handleBoughtSlots();
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     // Handle error
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  useEffect(() => {
+    if (isnetWork) {
+      const fetchStartTimePayment = async () => {
+        try {
+          const startTime = await getStartTime();
+          setStartTimePayment(startTime);
+        } catch (error) {
+          console.error("Error fetching startTimePayment:", error);
+        }
+      };
+
+      fetchStartTimePayment();
+    }
+  }, [isnetWork]);
+
+  useEffect(() => {
+    if (isnetWork) {
+      const fetchEndTimePayment = async () => {
+        try {
+          const startTime = await getEndTime();
+          setEndTimePayment(startTime);
+        } catch (error) {
+          console.error("Error fetching endTimePayment:", error);
+        }
+      };
+
+      fetchEndTimePayment();
+    }
+  }, [isnetWork]);
+
+  const handleBoughtSlots = async () => {
+    const boughtSlots = await getBoughtSlots();
+    if (boughtSlots) {
+      setBoughtSlots(boughtSlots);
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchStartTimePayment = async () => {
-      try {
-        const startTime = await getStartTime();
-        setStartTimePayment(startTime);
-      } catch (error) {
-        console.error("Error fetching startTimePayment:", error);
-      }
-    };
+  const isTimeBuy = () => {
+    if (
+      startTimePayment &&
+      endTimePayment &&
+      currentTime > startTimePayment &&
+      currentTime < endTimePayment
+    ) {
+      return true;
+    }
+    return false;
+  };
 
-    fetchStartTimePayment();
-  }, []);
-
-  useEffect(() => {
-    const fetchEndTimePayment = async () => {
-      try {
-        const startTime = await getEndTime();
-        setEndTimePayment(startTime);
-      } catch (error) {
-        console.error("Error fetching endTimePayment:", error);
-      }
-    };
-
-    fetchEndTimePayment();
-  }, []);
-
-  const handleBoughtSlots = async () => {
-    const boughtSlots = await getBoughtSlots();
-    setBoughtSlots(boughtSlots);
+  const beforeTimeBuy = () => {
+    if (startTimePayment && currentTime < startTimePayment) {
+      return true;
+    }
+    return false;
   };
 
   useEffect(() => {
-    handleBoughtSlots();
-  }, [slots]);
+    if (isnetWork) {
+      handleBoughtSlots();
+    }
+  }, [isnetWork, slots]);
 
   useEffect(() => {
-    fetchInformations();
-  }, []);
+    if (isnetWork) {
+      beforeTimeBuy();
+      isTimeBuy();
+    }
+  }, [isnetWork, currentTime]);
 
   useEffect(() => {
-    const targetDate = "2023-07-19T11:00:00";
-    // isLoading ?? startTimePayment
-    // const targetDate = startTimePayment; //11249560
-    countdown(targetDate);
-  }, []);
+    // const startDate = "2023-07-19T11:00:00";
+    // const endDate = "2023-07-20T11:00:00";
+    if (isnetWork) {
+      const startDate = parseInt(startTimePayment);
+      console.log({ currentTime });
+      const endDate = parseInt(endTimePayment);
+      // isLoading ?? startTimePayment
+      // const targetDate = startTimePayment; //11249560
+      if (currentTime < startTimePayment) {
+        countdownStart(startDate);
+      } else if (currentTime < endTimePayment) {
+        console.log({ currentTime });
+        console.log({ endTimePayment });
+        countdownEnd(endDate);
+      }
+    }
+  }, [isnetWork, currentTime]);
 
-  function countdown(targetDate) {
-    const now = new Date().getTime();
-    const endDate = new Date(targetDate).getTime();
-    const distance = endDate - now;
+  function countdownStart(targetDate) {
+    const now = new Date().getTime() / 1000;
+    const endDate = targetDate * 1000;
+    const distance = endDate - endDate;
 
     if (distance <= 0) {
       console.log("Time out!");
@@ -98,51 +145,130 @@ const Startin = ({ slots }) => {
 
     // Chờ 1 giây và gọi lại hàm countdown
     setTimeout(() => {
-      countdown(targetDate);
+      countdownStart(targetDate);
     }, 1000);
   }
 
+  function countdownEnd(targetDate) {
+    const now = new Date().getTime();
+    const endDate = targetDate * 1000;
+    const distance = endDate - now;
+    console.log({ distance });
+
+    if (distance <= 0) {
+      console.log("Time out!");
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    console.log({ days });
+    const hours = Math.floor(
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    document.getElementById("day").innerText = days;
+    document.getElementById("hour").innerText = hours;
+    document.getElementById("minute").innerText = minutes;
+    document.getElementById("second").innerText = seconds;
+
+    // Chờ 1 giây và gọi lại hàm countdown
+    setTimeout(() => {
+      countdownEnd(targetDate);
+    }, 1000);
+  }
+
+  // Đảm bảo DOM đã được tải hoàn toàn trước khi gán sự kiện lắng nghe
+  function copyToClipboard(textToCopy) {
+    // Tạo một phần tử input tạm thời để chứa nội dung cần sao chép
+    var tempInput = document.createElement("input");
+    tempInput.value = textToCopy;
+    document.body.appendChild(tempInput);
+
+    // Chọn toàn bộ nội dung trong input tạm thời
+    tempInput.select();
+
+    // Sao chép nội dung vào clipboard
+    document.execCommand("copy");
+
+    // Xóa input tạm thời
+    document.body.removeChild(tempInput);
+}
+
+
+
+
   return (
     <div>
+      {console.log({ beforeTimeBuy })}
+      {beforeTimeBuy() === true ? (
+        <p
+          className="absolute text"
+          style={{
+            fontSize: 65 * ratio,
+            top: 850 * ratio,
+            left: 795 * ratio,
+            fontStyle:"italic"
+          }}
+        >
+          START - IN
+        </p>
+      ) : (
+        <p
+          className="absolute text"
+          style={{
+            fontSize: 65 * ratio,
+            top: 850 * ratio,
+            left: 820 * ratio,
+            fontStyle:"italic"
+          }}
+        >
+          END - IN
+        </p>
+      )}
       <p
         className="absolute text"
-        style={{ fontSize: 100 * ratio, top: 1690 * ratio, left: 710 * ratio }}
-      >
-        START - IN
-      </p>
+        style={{
+          fontSize: 65 * ratio,
+          top: 850 * ratio,
+          left: 820 * ratio,
+          fontStyle:"italic"
+        }}
+      ></p>
       <img
         src={squaretime}
         className="absolute"
         alt="webbuton"
         style={{
-          height: 129 * ratio,
-          width: 758 * ratio,
-          top: 1850 * ratio,
-          left: 545 * ratio,
+          height: 103 * ratio,
+          width: 558 * ratio,
+          top: 960 * ratio,
+          left: 660 * ratio,
         }}
       />
       <p
         id="day"
         className="absolute text boder"
         style={{
-          height: 126 * ratio,
-          width: 142 * ratio,
-          fontSize: 80 * ratio,
-          top: 1850 * ratio,
-          left: 546 * ratio,
+          height: 70 * ratio,
+          width: 103 * ratio,
+          fontSize: 60 * ratio,
+          top: 960 * ratio,
+          left: 660 * ratio,
         }}
       >
-        2
+        0
       </p>
       <p
         id="daytext"
         className="absolute text boder"
         style={{
-          height: 35 * ratio,
-          width: 142 * ratio,
-          fontSize: 30 * ratio,
-          top: 1940 * ratio,
-          left: 545 * ratio,
+          height: 30 * ratio,
+          width: 103 * ratio,
+          fontSize: 25 * ratio,
+          top: 1030 * ratio,
+          left: 660 * ratio,
         }}
       >
         Day
@@ -151,24 +277,24 @@ const Startin = ({ slots }) => {
         id="hour"
         className="absolute text boder "
         style={{
-          height: 126 * ratio,
-          width: 142 * ratio,
-          fontSize: 80 * ratio,
-          top: 1850 * ratio,
-          left: 750 * ratio,
+          height: 70 * ratio,
+          width: 103 * ratio,
+          fontSize: 60 * ratio,
+          top: 960 * ratio,
+          left: 810 * ratio,
         }}
       >
-        3
+        0
       </p>
       <p
         id="hourtext"
         className="absolute text boder"
         style={{
-          height: 35 * ratio,
-          width: 142 * ratio,
-          fontSize: 30 * ratio,
-          top: 1940 * ratio,
-          left: 750 * ratio,
+          height: 30 * ratio,
+          width: 103 * ratio,
+          fontSize: 25 * ratio,
+          top: 1030 * ratio,
+          left: 810 * ratio,
         }}
       >
         Hour
@@ -177,24 +303,24 @@ const Startin = ({ slots }) => {
         id="minute"
         className="absolute text boder"
         style={{
-          height: 126 * ratio,
-          width: 142 * ratio,
-          fontSize: 80 * ratio,
-          top: 1850 * ratio,
-          left: 954 * ratio,
+          height: 70 * ratio,
+          width: 103 * ratio,
+          fontSize: 60 * ratio,
+          top: 960 * ratio,
+          left: 961 * ratio,
         }}
       >
-        3
+        0
       </p>
       <p
         id="minutetext"
         className="absolute text boder"
         style={{
-          height: 35 * ratio,
-          width: 142 * ratio,
-          fontSize: 30 * ratio,
-          top: 1940 * ratio,
-          left: 954 * ratio,
+          height: 30 * ratio,
+          width: 103 * ratio,
+          fontSize: 25 * ratio,
+          top: 1030 * ratio,
+          left: 961 * ratio,
         }}
       >
         Minute
@@ -203,68 +329,37 @@ const Startin = ({ slots }) => {
         id="second"
         className="absolute text boder boder"
         style={{
-          height: 126 * ratio,
-          width: 142 * ratio,
-          fontSize: 80 * ratio,
-          top: 1850 * ratio,
-          left: 1158 * ratio,
+          height: 70 * ratio,
+          width: 103 * ratio,
+          fontSize: 60 * ratio,
+          top: 960 * ratio,
+          left: 1112 * ratio,
         }}
       >
-        3
+        0
       </p>
       <p
         id="secondtext"
         className="absolute text boder"
         style={{
-          height: 35 * ratio,
-          width: 142 * ratio,
-          fontSize: 30 * ratio,
-          top: 1940 * ratio,
-          left: 1158 * ratio,
+          height: 30 * ratio,
+          width: 103 * ratio,
+          fontSize: 25 * ratio,
+          top: 1030 * ratio,
+          left: 1112 * ratio,
         }}
       >
         Second
       </p>
-      {/* {walletAddress ? (
-        <a>
-          <img
-            src={purchaseButton}
-            className="absolute"
-            alt="purchase"
-            style={{
-              height: 76 * ratio,
-              width: 386 * ratio,
-              top: 2610 * ratio,
-              left: 760 * ratio,
-            }}
-            onClick={connectWallet}
-          />
-        </a>
-      ) : (
-        <a>
-          <img
-            src={connectbutton}
-            className="absolute"
-            alt="connectbutton"
-            style={{
-              height: 76 * ratio,
-              width: 386 * ratio,
-              top: 2610 * ratio,
-              left: 760 * ratio,
-            }}
-            onClick={connectWallet}
-          />
-        </a>
-      )}
-      ; */}
-      <table 
+
+      <table
         className="absolute text-while custom-table"
         style={{
-          fontSize: 30 * ratio,
-          height: 300 * ratio,
-          width: 1500 * ratio,
-          top: 2000 * ratio,
-          left: 150 * ratio,
+          fontSize: 26 * ratio,
+          height: 400 * ratio,
+          width: 1050 * ratio,
+          top: 1150 * ratio,
+          left: 430 * ratio,
         }}
       >
         <thead>
@@ -279,13 +374,18 @@ const Startin = ({ slots }) => {
           <tr>
             <td className="text-left">Total</td>
             <td className="text-right">4,000,000 APX</td>
-            <td className="text-right" > <p  className="let-right">Token Name</p></td>
+            <td className="text-right">
+              {" "}
+              <p className="let-right">Token Name</p>
+            </td>
             <td className="text-right">Arena Pixel</td>
           </tr>
           <tr>
             <td className="text-left">Allwance</td>
             <td className="text-right">4000 slots</td>
-            <td className="text-right"><p  className="let-right">Symbol</p></td>
+            <td className="text-right">
+              <p className="let-right">Symbol</p>
+            </td>
             <td className="text-right">APX</td>
           </tr>
           <tr>
@@ -293,11 +393,22 @@ const Startin = ({ slots }) => {
             {isLoading ? (
               <td className="text-right">Loading...</td>
             ) : (
-              <td className="text-right">{boughtSlots.toString()}</td>
+              <td className="text-right">{boughtSlots.toString()} slots</td>
             )}
-            <td  className="text-right"><p  className="let-right">Contract</p></td>
             <td className="text-right">
-              <a  href="https://testnet.bscscan.com/address/0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b" className="text-hiden" target="_blank">0x875fb...ff85b</a>
+              <p className="let-right">Contract</p>
+            </td>
+            <td className="text-right">
+              
+             <a
+                href="https://testnet.bscscan.com/address/0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b"
+                className="text-hiden"
+                target="_blank"
+                style={{paddingRight:10*ratio}}
+              >
+                0x875fb...ff85b
+              </a>
+              <button onClick={copyToClipboard('0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b') } style={{backgroundColor:'transparent'}}> <img id="copyimg" className="button" src={copy} style={{height:20*ratio,width:20*ratio}} /> </button>
             </td>
           </tr>
           <tr>
@@ -305,9 +416,13 @@ const Startin = ({ slots }) => {
             {isLoading ? (
               <td className="text-right">Loading...</td>
             ) : (
-              <td className="text-right">{(4000 - boughtSlots).toString()}</td>
+              <td className="text-right">
+                {(4000 - boughtSlots).toString()} APX
+              </td>
             )}
-            <td className="text-right" ><p  className="let-right">Allocating per slot</p></td>
+            <td className="text-right">
+              <p className="let-right">Allocating per slot</p>
+            </td>
             <td className="text-right">50 USDT ~ 1000 APX</td>
           </tr>
         </tbody>

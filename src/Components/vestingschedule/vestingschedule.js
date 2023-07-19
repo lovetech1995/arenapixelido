@@ -1,13 +1,13 @@
 import "../../App.css";
 import React, { useState, useEffect } from "react";
 import { useWindowSize } from "../../useWindowSize";
-import claim from "./image/claimbutton.png";
+import disableClaim from "./image/disableClaim.png";
 import { getStageInfo } from "../../hooks/getStageInfo";
 import { getUserSlots } from "../../hooks/getUserSlots";
 import { getUserClaimed } from "../../hooks/getIsClaimed";
 import { claimIdo } from "../../hooks/claimIdo";
 
-export const Vestingschedule = ({ wallet }) => {
+export const Vestingschedule = ({ isnetWork, wallet }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
@@ -31,11 +31,10 @@ export const Vestingschedule = ({ wallet }) => {
     console.log("wallet", wallet);
     try {
       const slots = await getUserSlots(wallet);
-      console.log("slots:", slots);
+      console.log({ slots });
       setUserSlots(slots);
     } catch (error) {
       console.error("Error fetching user slot:", error);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -103,26 +102,28 @@ export const Vestingschedule = ({ wallet }) => {
   };
 
   useEffect(() => {
-    handleStageInfo();
-    handleUserSlots();
-  }, [wallet]);
+    if (isnetWork) {
+      handleStageInfo();
+      handleUserSlots();
+    }
+  }, [isnetWork, wallet]);
 
   return (
     <div>
       <p
         className="absolute text "
-        style={{ fontSize: 60 * ratio, top: 2415 * ratio, left: 670 * ratio }}
+        style={{ fontSize: 90 * ratio, top: 1800 * ratio, left: 480 * ratio }}
       >
         VESTING SCHEDULE
       </p>
       <table
         className="absolute text-while"
         style={{
-          fontSize: 23 * ratio,
-          height: 360 * ratio,
-          width: 1500 * ratio,
-          top: 2500 * ratio,
-          left: 150 * ratio,
+          fontSize: 30 * ratio,
+          height: 450 * ratio,
+          width: 1000 * ratio,
+          top: 2000 * ratio,
+          left: 450 * ratio,
         }}
       >
         <thead>
@@ -156,7 +157,7 @@ export const Vestingschedule = ({ wallet }) => {
               <td>
                 <a>
                   <img
-                    src={claim}
+                    src={disableClaim}
                     style={{ height: 36 * ratio, width: 112 * ratio }}
                   />
                 </a>
@@ -182,11 +183,11 @@ export const Vestingschedule = ({ wallet }) => {
                   <td>
                     <a>
                       <img
-                        src={claim}
+                        src={disableClaim}
                         style={{ height: 36 * ratio, width: 112 * ratio }}
-                        onClick={() =>
-                          isProcessing ? null : handleClaimIdo(item._stageId)
-                        }
+                        // onClick={() =>
+                        //   isProcessing ? null : handleClaimIdo(item._stageId)
+                        // }
                       />
                     </a>
                   </td>

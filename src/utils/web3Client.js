@@ -1,13 +1,35 @@
 import Web3 from "web3";
 import abi from "../abi/abi.json";
+import web3 from "web3";
 import paymentAbi from "../abi/paymentAbi.json";
 
-export const getContract = async () => {
+export const getContractNetwork = async () => {
+  let contract = null;
+  if (window.ethereum.networkVersion !== 97) {
+    try {
+      window.ethereum
+        .request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: web3.utils.toHex(97) }],
+        })
+        .then(() => {
+          contract = getContractNetwork();
+
+          return contract;
+        });
+    } catch (err) {
+      console.log({ err });
+    }
+  } else {
+    contract = getContractNetwork();
+
+    return contract;
+  }
+};
+
+export const getContract = () => {
   const contractAddress = "0x56F803CDe2c37883a5D20aEd7Cb7C8d24F03e295";
   const web3 = new Web3(window.ethereum);
-
-  const networkId = await web3.eth.net.getId();
-  console.log(networkId);
 
   const contract = new web3.eth.Contract(abi, contractAddress);
   return contract;

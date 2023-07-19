@@ -6,7 +6,7 @@ import telegrambutton from "./image/telegrambutton.png";
 import twtbutton from "./image/twtbutton.png";
 import marrketplace from "./image/marrketplace.png";
 import pitchdeck from "./image/pitchdeck.png";
-import wwhitpaper from "./image/wwhitpaper.png";
+import wpp from "./image/WPP.png";
 import gamebt from "./image/gamebt.png";
 import { useWindowSize } from "../../useWindowSize";
 
@@ -20,15 +20,15 @@ const Info = () => {
         className="absolute"
         alt="title"
         style={{
-          height: 234 * ratio,
-          width: 1607 * ratio,
-          top: 50 * ratio,
-          left: 120 * ratio,
+          height: 104 * ratio,
+          width: 1170 * ratio,
+          top: 40 * ratio,
+          left: 360 * ratio,
         }}
       />
       <p
         className="absolute  text"
-        style={{ fontSize: 36 * ratio, top: 400 * ratio, left: 200 * ratio }}
+        style={{ fontSize: 28 * ratio, top:240 * ratio, left: 410 * ratio }}
       >
         GameFi Tap to Earn NFT, with a completely unique gameplay and
         money-making method,
@@ -41,10 +41,10 @@ const Info = () => {
           className="absolute"
           alt="webbuton"
           style={{
-            height: 83 * ratio,
-            width: 83 * ratio,
-            top: 550 * ratio,
-            left: 760 * ratio,
+            height: 53 * ratio,
+            width: 53 * ratio,
+            top: 320 * ratio,
+            left: 875 * ratio,
           }}
         />
       </a>
@@ -54,10 +54,10 @@ const Info = () => {
           className="absolute"
           alt="telegrambutton"
           style={{
-            height: 83 * ratio,
-            width: 83 * ratio,
-            top: 550 * ratio,
-            left: 890 * ratio,
+            height: 53 * ratio,
+            width: 53 * ratio,
+            top: 320 * ratio,
+            left: 960 * ratio,
           }}
         />
       </a>
@@ -67,10 +67,10 @@ const Info = () => {
           className="absolute"
           alt="twtbutton"
           style={{
-            height: 83 * ratio,
-            width: 83 * ratio,
-            top: 550 * ratio,
-            left: 1030 * ratio,
+            height: 53 * ratio,
+            width: 53 * ratio,
+            top: 320 * ratio,
+            left: 1045 * ratio,
           }}
         />
       </a>
@@ -81,10 +81,10 @@ const Info = () => {
           className="absolute"
           alt="marrketplace"
           style={{
-            height: 100 * ratio,
-            width: 359 * ratio,
-            top: 600 * ratio,
-            left: 150 * ratio,
+            height: 80 * ratio,
+            width: 259 * ratio,
+            top: 330 * ratio,
+            left: 400 * ratio,
           }}
         />
       </a>
@@ -94,23 +94,26 @@ const Info = () => {
           className="absolute"
           alt="pitchdeck"
           style={{
-            height: 100 * ratio,
-            width: 359 * ratio,
-            top: 570 * ratio,
-            left: 1390 * ratio,
+            height: 80 * ratio,
+            width: 259 * ratio,
+            top: 310 * ratio,
+            left: 1300 * ratio,
           }}
         />
       </a>
-      <a target="_blank" href="https://arenapixels-organization.gitbook.io/arena-pixel-whitepaper/">
+      <a
+        target="_blank"
+        href="https://arenapixels-organization.gitbook.io/arena-pixel-whitepaper/"
+      >
         <img
-          src={wwhitpaper}
+          src={wpp}
           className="absolute"
-          alt="wwhitpaper"
+          alt="whitepaper"
           style={{
-            height: 100 * ratio,
-            width: 359 * ratio,
-            top: 730 * ratio,
-            left: 150 * ratio,
+            height: 80 * ratio,
+            width: 259 * ratio,
+            top: 430 * ratio,
+            left: 400 * ratio,
           }}
         />
       </a>
@@ -120,10 +123,10 @@ const Info = () => {
           className="absolute"
           alt="gamebt"
           style={{
-            height: 100 * ratio,
-            width: 359 * ratio,
-            top: 700 * ratio,
-            left: 1390 * ratio,
+            height: 80 * ratio,
+            width: 259 * ratio,
+            top: 410 * ratio,
+            left: 1300 * ratio,
           }}
         />
       </a>

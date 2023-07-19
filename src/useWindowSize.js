@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Grid } from "antd";
 
-
 const { useBreakpoint } = Grid;
 
 export const useWindowSize = ({ gameWidth, gameHeight }) => {
@@ -15,7 +14,6 @@ export const useWindowSize = ({ gameWidth, gameHeight }) => {
     marginLeft: 0,
     ratio: 1,
   });
-  // -------------------------- REDUX --------------------------
   // -------------------------- FUNCTION --------------------------
   // -------------------------- EFFECT --------------------------
   useEffect(() => {
@@ -31,16 +29,22 @@ export const useWindowSize = ({ gameWidth, gameHeight }) => {
       let width = windowWidth;
       let rotate = "0deg";
       let marginLeft = 0;
-      if (screens?.xs) {
+
+      // Kiểm tra nếu là điện thoại ở chế độ đứng hoặc tablets ở chế độ đứng thì set rotate = "90deg"
+      if (
+        (screens?.xs && window.matchMedia("(orientation: portrait)").matches) ||
+        (screens?.sm && window.matchMedia("(orientation: portrait)").matches)
+      ) {
         width = windowHeight;
         rotate = "90deg";
         marginLeft = windowWidth;
       }
+
       const height = (width / gameWidth) * gameHeight;
       const ratio = width / gameWidth;
       const pveHeight = 800 * ratio;
       const pveTop = 92 * ratio;
-      const size = {
+      const newSize = {
         width,
         height,
         rotate,
@@ -49,16 +53,16 @@ export const useWindowSize = ({ gameWidth, gameHeight }) => {
         pveHeight,
         pveTop,
       };
-      setSize(size);
+      setSize(newSize);
     };
+
     window.addEventListener("resize", handleResize);
     handleResize();
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [gameWidth, gameHeight, screens?.xs]);
-  // -------------------------- DATA FUNCTION --------------------------
-
+  }, [gameWidth, gameHeight, screens?.xs, screens?.sm]);
   // -------------------------- RENDER --------------------------
 
   // -------------------------- MAIN --------------------------
