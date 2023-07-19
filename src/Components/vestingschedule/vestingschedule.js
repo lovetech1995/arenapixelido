@@ -30,7 +30,7 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
   const handleUserSlots = async () => {
     console.log("wallet", wallet);
     try {
-      const slots = getUserSlots(wallet);
+      const slots = await getUserSlots(wallet);
       console.log({ slots });
       setUserSlots(slots);
     } catch (error) {
