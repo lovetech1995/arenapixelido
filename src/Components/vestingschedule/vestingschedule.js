@@ -1,7 +1,7 @@
 import "../../App.css";
 import React, { useState, useEffect } from "react";
 import { useWindowSize } from "../../useWindowSize";
-import claim from "./image/claimbutton.png";
+import disableClaim from "./image/disableClaim.png";
 import { getStageInfo } from "../../hooks/getStageInfo";
 import { getUserSlots } from "../../hooks/getUserSlots";
 import { getUserClaimed } from "../../hooks/getIsClaimed";
@@ -157,7 +157,7 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
               <td>
                 <a>
                   <img
-                    src={claim}
+                    src={disableClaim}
                     style={{ height: 36 * ratio, width: 112 * ratio }}
                   />
                 </a>
@@ -183,11 +183,11 @@ export const Vestingschedule = ({ isnetWork, wallet }) => {
                   <td>
                     <a>
                       <img
-                        src={claim}
+                        src={disableClaim}
                         style={{ height: 36 * ratio, width: 112 * ratio }}
-                        onClick={() =>
-                          isProcessing ? null : handleClaimIdo(item._stageId)
-                        }
+                        // onClick={() =>
+                        //   isProcessing ? null : handleClaimIdo(item._stageId)
+                        // }
                       />
                     </a>
                   </td>

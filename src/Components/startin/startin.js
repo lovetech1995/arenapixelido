@@ -143,7 +143,7 @@ const Startin = ({ isnetWork, slots }) => {
           left: 546 * ratio,
         }}
       >
-        2
+        0
       </p>
       <p
         id="daytext"
@@ -169,7 +169,7 @@ const Startin = ({ isnetWork, slots }) => {
           left: 750 * ratio,
         }}
       >
-        3
+        0
       </p>
       <p
         id="hourtext"
@@ -195,7 +195,7 @@ const Startin = ({ isnetWork, slots }) => {
           left: 954 * ratio,
         }}
       >
-        3
+        0
       </p>
       <p
         id="minutetext"
@@ -221,7 +221,7 @@ const Startin = ({ isnetWork, slots }) => {
           left: 1158 * ratio,
         }}
       >
-        3
+        0
       </p>
       <p
         id="secondtext"

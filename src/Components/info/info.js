@@ -6,7 +6,7 @@ import telegrambutton from "./image/telegrambutton.png";
 import twtbutton from "./image/twtbutton.png";
 import marrketplace from "./image/marrketplace.png";
 import pitchdeck from "./image/pitchdeck.png";
-import wwhitpaper from "./image/wwhitpaper.png";
+import wpp from "./image/WPP.png";
 import gamebt from "./image/gamebt.png";
 import { useWindowSize } from "../../useWindowSize";
 
@@ -101,11 +101,14 @@ const Info = () => {
           }}
         />
       </a>
-      <a target="_blank" href="https://arenapixels-organization.gitbook.io/arena-pixel-whitepaper/">
+      <a
+        target="_blank"
+        href="https://arenapixels-organization.gitbook.io/arena-pixel-whitepaper/"
+      >
         <img
-          src={wwhitpaper}
+          src={wpp}
           className="absolute"
-          alt="wwhitpaper"
+          alt="whitepaper"
           style={{
             height: 100 * ratio,
             width: 359 * ratio,
