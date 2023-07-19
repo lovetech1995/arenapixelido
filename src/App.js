@@ -146,7 +146,7 @@ function App() {
         style={{
           backgroundImage: `url(${backgroundImage})`,
           width,
-          height: 3106 * ratio,
+          height: 2801 * ratio,
         }}
       ></div>
     );

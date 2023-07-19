@@ -69,7 +69,7 @@ const Startin = ({ isnetWork, slots }) => {
     }
   };
 
-  const isTimeBuy = async () => {
+  const isTimeBuy = () => {
     if (
       startTimePayment &&
       endTimePayment &&
@@ -81,7 +81,7 @@ const Startin = ({ isnetWork, slots }) => {
     return false;
   };
 
-  const beforeTimeBuy = async () => {
+  const beforeTimeBuy = () => {
     if (startTimePayment && currentTime < startTimePayment) {
       return true;
     }
@@ -181,7 +181,7 @@ const Startin = ({ isnetWork, slots }) => {
   return (
     <div>
       {console.log({ beforeTimeBuy })}
-      {!!beforeTimeBuy() ? (
+      {beforeTimeBuy() === true ? (
         <p
           className="absolute text"
           style={{
