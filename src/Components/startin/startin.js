@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useWindowSize } from "../../useWindowSize";
 import squaretime from "./image/squaretime.png";
 import copy from "./image/copy.png";
-import success from "./image/success.png";
+// import success from "./image/success.png";
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 
