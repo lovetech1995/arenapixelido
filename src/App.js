@@ -1,10 +1,12 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useWindowSize } from "./useWindowSize";
 import backgroundImage from "./image/background.png";
 import Info from "./Components/info/info";
 import Startin from "./Components/startin/startin";
 import { Vestingschedule } from "./Components/vestingschedule/vestingschedule";
+import detectEthereumProvider from "@metamask/detect-provider";
+import web3 from "web3";
 import logo from "./image/logo.png";
 import connectbutton from "./image/connectbutton.png";
 import purchaseButton from "./image/purchaseButton.png";
@@ -12,20 +14,18 @@ import { PurchaseModal } from "./Components/popup/popup";
 import { getStartTime, getEndTime } from "./hooks/getPaymentTime";
 
 function App() {
-  const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3106 });
+  const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 1080 });
   const { rotate, width, height, marginLeft, ratio } = size;
-
- 
+  const [provider, setProvider] = useState(null);
+  const [isnetWork, setIsNetwork] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
   const [boughtSlots, setBoughtSlots] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
   const [startTimePayment, setStartTimePayment] = useState("");
   const [endTimePayment, setEndTimePayment] = useState("");
 
-  const connectWallet = async () => {
-    let provider = window.ethereum;
-
-    if (typeof provider !== "undefined") {
+  const connectWallet = useCallback(() => {
+    if (provider) {
       provider
         .request({ method: "eth_requestAccounts" })
         .then((accounts) => {
@@ -34,22 +34,37 @@ function App() {
         })
         .catch((err) => {
           console.log(err);
-          return;
         });
-
-      window.ethereum.on("accountsChanged", function (accounts) {
-        setWalletAddress(accounts[0]);
-        console.log(`Selected account changed to ${walletAddress}`);
-      });
     }
-  };
+  }, [provider]);
+
+  const switchNetwork = useCallback(() => {
+    if (window.ethereum.networkVersion !== 97) {
+      try {
+        window.ethereum
+          .request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: web3.utils.toHex(97) }],
+          })
+          .then(() => {
+            connectWallet();
+            setIsNetwork(true);
+            // window.location.reload();
+          });
+      } catch (err) {
+        setIsNetwork(false);
+      }
+    } else {
+      connectWallet();
+      setIsNetwork(true);
+    }
+  }, [connectWallet]);
 
   const fetchTime = async () => {
     const startTime = await getStartTime();
     const endTime = await getEndTime();
     setStartTimePayment(startTime);
     setEndTimePayment(endTime);
-    
   };
 
   const isTimeBuy = async () => {
@@ -85,26 +100,63 @@ function App() {
     }
   };
 
+  const detectProvider = useCallback(() => {
+    detectEthereumProvider().then((provider) => {
+      if (provider) {
+        setProvider(provider);
+      } else {
+        alert("Please install metamask");
+      }
+    });
+  }, []);
+
+  // ------------- use effect--------------//
+
   useEffect(() => {
-    connectWallet();
-  });
+    detectProvider();
+  }, []);
+
+  useEffect(() => {
+    if (provider) {
+      switchNetwork();
+
+      provider.on("accountsChanged", function (accounts) {
+        setWalletAddress(accounts[0]);
+        console.log(`Selected account changed to ${walletAddress}`);
+      });
+    }
+  }, [connectWallet, provider]);
+
+  const renderBackground = () => {
+    return (
+      <div
+        className="container-screen"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          width,
+          height: 3106 * ratio,
+        }}
+      ></div>
+    );
+  };
 
   return (
     <div
       id="root"
       className="container-screen mobile-rotater"
       style={{
-        backgroundImage: `url(${backgroundImage})`,
+        overflowX: "auto",
         height,
         width,
         transform: `rotate(${rotate})`,
         marginLeft: marginLeft,
       }}
     >
+      {renderBackground()}
       <Info />
-      <Startin slots={boughtSlots} />
+      <Startin isnetWork={isnetWork} slots={boughtSlots} />
       {walletAddress ? (
-        <a  className="button" onClick={handleTimeBuy}>
+        <a className="button" onClick={handleTimeBuy}>
           <img
             src={purchaseButton}
             className="absolute"
@@ -118,7 +170,7 @@ function App() {
           />
         </a>
       ) : (
-        <a >
+        <a>
           <img
             src={connectbutton}
             className="absolute"
@@ -133,8 +185,8 @@ function App() {
           />
         </a>
       )}
-      
-      <Vestingschedule wallet={walletAddress} />
+
+      <Vestingschedule isnetWork={isnetWork} wallet={walletAddress} />
       <PurchaseModal
         isOpened={modalOpen}
         wallet={walletAddress}

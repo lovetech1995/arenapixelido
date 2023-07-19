@@ -7,7 +7,7 @@ import { getUserSlots } from "../../hooks/getUserSlots";
 import { getUserClaimed } from "../../hooks/getIsClaimed";
 import { claimIdo } from "../../hooks/claimIdo";
 
-export const Vestingschedule = ({ wallet }) => {
+export const Vestingschedule = ({ isnetWork, wallet }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
@@ -30,12 +30,11 @@ export const Vestingschedule = ({ wallet }) => {
   const handleUserSlots = async () => {
     console.log("wallet", wallet);
     try {
-      const slots = await getUserSlots(wallet);
-      console.log("slots:", slots);
+      const slots = getUserSlots(wallet);
+      console.log({ slots });
       setUserSlots(slots);
     } catch (error) {
       console.error("Error fetching user slot:", error);
-    } finally {
       setIsLoading(false);
     }
   };
@@ -103,9 +102,11 @@ export const Vestingschedule = ({ wallet }) => {
   };
 
   useEffect(() => {
-    handleStageInfo();
-    handleUserSlots();
-  }, [wallet]);
+    if (isnetWork) {
+      handleStageInfo();
+      handleUserSlots();
+    }
+  }, [isnetWork, wallet]);
 
   return (
     <div>

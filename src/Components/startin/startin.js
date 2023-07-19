@@ -5,7 +5,7 @@ import squaretime from "./image/squaretime.png";
 import { getStartTime, getEndTime } from "../../hooks/getPaymentTime";
 import { getBoughtSlots } from "../../hooks/getBoughtSlot";
 
-const Startin = ({ slots }) => {
+const Startin = ({ isnetWork, slots }) => {
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
 
@@ -20,7 +20,7 @@ const Startin = ({ slots }) => {
       // setStartTimePayment(startTime);
       // const endTime = await getEndTime();
       // setEndTimePayment(endTime);
-      handleBoughtSlots();
+      // handleBoughtSlots();
       setIsLoading(false);
     } catch (error) {
       // Handle error
@@ -29,43 +29,54 @@ const Startin = ({ slots }) => {
   };
 
   useEffect(() => {
-    const fetchStartTimePayment = async () => {
-      try {
-        const startTime = await getStartTime();
-        setStartTimePayment(startTime);
-      } catch (error) {
-        console.error("Error fetching startTimePayment:", error);
-      }
-    };
+    if (isnetWork) {
+      const fetchStartTimePayment = async () => {
+        try {
+          const startTime = await getStartTime();
+          setStartTimePayment(startTime);
+        } catch (error) {
+          console.error("Error fetching startTimePayment:", error);
+        }
+      };
 
-    fetchStartTimePayment();
-  }, []);
+      fetchStartTimePayment();
+    }
+  }, [isnetWork]);
 
   useEffect(() => {
-    const fetchEndTimePayment = async () => {
-      try {
-        const startTime = await getEndTime();
-        setEndTimePayment(startTime);
-      } catch (error) {
-        console.error("Error fetching endTimePayment:", error);
-      }
-    };
+    if (isnetWork) {
+      const fetchEndTimePayment = async () => {
+        try {
+          const startTime = await getEndTime();
+          setEndTimePayment(startTime);
+        } catch (error) {
+          console.error("Error fetching endTimePayment:", error);
+        }
+      };
 
-    fetchEndTimePayment();
-  }, []);
+      fetchEndTimePayment();
+    }
+  }, [isnetWork]);
 
   const handleBoughtSlots = async () => {
     const boughtSlots = await getBoughtSlots();
-    setBoughtSlots(boughtSlots);
+    if (boughtSlots) {
+      setBoughtSlots(boughtSlots);
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    handleBoughtSlots();
-  }, [slots]);
+    if (isnetWork) {
+      handleBoughtSlots();
+    }
+  }, [isnetWork, slots]);
 
-  useEffect(() => {
-    fetchInformations();
-  }, []);
+  // useEffect(() => {
+  //   if (isnetWork) {
+  //     fetchInformations();
+  //   }
+  // }, [isnetWork]);
 
   useEffect(() => {
     const targetDate = "2023-07-19T11:00:00";
@@ -257,7 +268,7 @@ const Startin = ({ slots }) => {
         </a>
       )}
       ; */}
-      <table 
+      <table
         className="absolute text-while custom-table"
         style={{
           fontSize: 30 * ratio,
@@ -279,13 +290,18 @@ const Startin = ({ slots }) => {
           <tr>
             <td className="text-left">Total</td>
             <td className="text-right">4,000,000 APX</td>
-            <td className="text-right" > <p  className="let-right">Token Name</p></td>
+            <td className="text-right">
+              {" "}
+              <p className="let-right">Token Name</p>
+            </td>
             <td className="text-right">Arena Pixel</td>
           </tr>
           <tr>
             <td className="text-left">Allwance</td>
             <td className="text-right">4000 slots</td>
-            <td className="text-right"><p  className="let-right">Symbol</p></td>
+            <td className="text-right">
+              <p className="let-right">Symbol</p>
+            </td>
             <td className="text-right">APX</td>
           </tr>
           <tr>
@@ -295,9 +311,17 @@ const Startin = ({ slots }) => {
             ) : (
               <td className="text-right">{boughtSlots.toString()}</td>
             )}
-            <td  className="text-right"><p  className="let-right">Contract</p></td>
             <td className="text-right">
-              <a  href="https://testnet.bscscan.com/address/0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b" className="text-hiden" target="_blank">0x875fb...ff85b</a>
+              <p className="let-right">Contract</p>
+            </td>
+            <td className="text-right">
+              <a
+                href="https://testnet.bscscan.com/address/0x875fb712e8f6d3c52ea0c0680a8368ff5d2ff85b"
+                className="text-hiden"
+                target="_blank"
+              >
+                0x875fb...ff85b
+              </a>
             </td>
           </tr>
           <tr>
@@ -307,7 +331,9 @@ const Startin = ({ slots }) => {
             ) : (
               <td className="text-right">{(4000 - boughtSlots).toString()}</td>
             )}
-            <td className="text-right" ><p  className="let-right">Allocating per slot</p></td>
+            <td className="text-right">
+              <p className="let-right">Allocating per slot</p>
+            </td>
             <td className="text-right">50 USDT ~ 1000 APX</td>
           </tr>
         </tbody>
