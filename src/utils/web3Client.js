@@ -5,12 +5,12 @@ import paymentAbi from "../abi/paymentAbi.json";
 
 export const getContractNetwork = async () => {
   let contract = null;
-  if (window.ethereum.networkVersion !== 97) {
+  if (window.ethereum.networkVersion !== 56) {
     try {
       window.ethereum
         .request({
           method: "wallet_switchEthereumChain",
-          params: [{ chainId: web3.utils.toHex(97) }],
+          params: [{ chainId: web3.utils.toHex(56) }],
         })
         .then(() => {
           contract = getContractNetwork();
@@ -28,7 +28,7 @@ export const getContractNetwork = async () => {
 };
 
 export const getContract = () => {
-  const contractAddress = "0x56F803CDe2c37883a5D20aEd7Cb7C8d24F03e295";
+  const contractAddress = "0x92F564A9DA6c3BcCD38137E46bD446890CAfEE69";
   const web3 = new Web3(window.ethereum);
 
   const contract = new web3.eth.Contract(abi, contractAddress);
@@ -36,7 +36,7 @@ export const getContract = () => {
 };
 
 export const getPaymentContract = async () => {
-  const contractAddress = "0x1d9214523f53CEF4D4770D404a5d8cce4Ef43C5d";
+  const contractAddress = "0x55d398326f99059fF775485246999027B3197955";
   const web3 = new Web3(window.ethereum);
 
   const paymentContract = new web3.eth.Contract(paymentAbi, contractAddress);

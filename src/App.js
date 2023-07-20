@@ -39,12 +39,12 @@ function App() {
   }, [provider]);
 
   const switchNetwork = useCallback(() => {
-    if (window.ethereum.networkVersion !== 97) {
+    if (window.ethereum.networkVersion !== 56) {
       try {
         window.ethereum
           .request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: web3.utils.toHex(97) }],
+            params: [{ chainId: web3.utils.toHex(56) }],
           })
           .then(() => {
             connectWallet();
@@ -167,25 +167,27 @@ function App() {
       {renderBackground()}
       <Info />
       <Startin isnetWork={isnetWork} slots={boughtSlots} />
+      {console.log("isended", isEndedIdo())}
+      {/* {const isEnded = isEndedIdo()} */}
       {walletAddress ? (
-        !isEndedIdo() ? (
-          <a className="button" onClick={handleTimeBuy}>
-            <img
-              src={purchaseButton}
-              className="absolute"
-              alt="purchase"
-              style={{
-                height: 90 * ratio,
-                width: 350 * ratio,
-                top: 1590 * ratio,
-                left: 760 * ratio,
-              }}
-            />
-          </a>
-        ) : (
-          <a></a>
-        )
+        // isEndedIdo() === false ? (
+        <a className="button" onClick={handleTimeBuy}>
+          <img
+            src={purchaseButton}
+            className="absolute"
+            alt="purchase"
+            style={{
+              height: 90 * ratio,
+              width: 350 * ratio,
+              top: 1590 * ratio,
+              left: 760 * ratio,
+            }}
+          />
+        </a>
       ) : (
+        // ) : (
+        //   <a></a>
+        // )
         <a>
           <img
             src={connectbutton}

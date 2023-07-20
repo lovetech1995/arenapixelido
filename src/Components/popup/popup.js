@@ -19,8 +19,8 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
   const [approved, setApproved] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [boughtQuantity, setBoughtQuantity] = useState(1);
-  const [received, setReceived] = useState("");
-  const [price, setPrice] = useState("");
+  const [received, setReceived] = useState("2200 APX");
+  const [price, setPrice] = useState("100 USDT");
 
   const { size } = useWindowSize({ gameWidth: 1920, gameHeight: 3405 });
   const { ratio } = size;
@@ -47,8 +47,8 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
 
   const handleReceivePrice = async (number) => {
     const quantity = parseInt(number);
-    setPrice(`${quantity * 50} USD`);
-    setReceived(`${quantity * 1000} APX`);
+    setPrice(`${quantity * 100} USDT`);
+    setReceived(`${quantity * 2200} APX`);
   };
 
   const handleApprove = async (amount) => {
@@ -62,7 +62,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
     const quantity = document.getElementById("number").innerText;
     const quantityInt = parseInt(quantity);
     console.log("quantityInt", quantityInt);
-    const value = quantity * 50;
+    const value = quantity * 100;
     const valueInWei = web3.utils.toWei(value, "ether");
     try {
       await handleApprove(valueInWei);
@@ -100,7 +100,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
             backgroundImage: `url(${backgroudPop})`,
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
-            outline:"none",
+            outline: "none",
           }}
         >
           <Typography
@@ -196,6 +196,7 @@ export const PurchaseModal = ({ isOpened, wallet, onUpdateSlots, onClose }) => {
             variant="h3"
             component="h2"
           >
+            {" "}
             {received}
           </Typography>
 
